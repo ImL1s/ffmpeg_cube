@@ -105,6 +105,7 @@ void main() {
 
       for (final line in malformedLines) {
         // Should not throw, may return null or partial data
+        // ignore: unused_local_variable
         final progress = JobProgress.fromFFmpegOutput(line);
         // Just verify no exception is thrown
         expect(true, true);
