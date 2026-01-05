@@ -6,11 +6,89 @@
   <a href="https://github.com/ImL1s/ffmpeg_cube/actions"><img src="https://github.com/ImL1s/ffmpeg_cube/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
 </p>
 
-跨平台影音處理與播放 SDK for Flutter，支援 Android、iOS、macOS、Windows、Linux、Web 六大平台。
+# FFmpeg Cube Workspace
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Flutter-Framework-blue?logo=flutter" alt="Flutter">
+  <img src="https://img.shields.io/badge/FFmpeg-Powered-green?logo=ffmpeg" alt="FFmpeg">
+  <a href="https://github.com/ImL1s/ffmpeg_cube/actions"><img src="https://github.com/ImL1s/ffmpeg_cube/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+</p>
+
+[English](#english) | [中文](#中文)
 
 ---
 
-## 📂 專案結構
+<a name="english"></a>
+## English
+
+**Cross-platform Audio/Video Processing & Playback SDK for Flutter.**  
+Supports **Android**, **iOS**, **macOS**, **Windows**, **Linux**, and **Web**.
+
+### 📂 Project Structure
+
+```
+ffmpeg_cube/
+├── ffmpeg_cube_pkg/     # 💎 Core Flutter SDK Package
+│   ├── lib/             # SDK Source Code
+│   ├── example/         # Example Application
+│   └── test/            # Unit Tests (106 tests)
+├── docs/                # Design Documentation
+├── .github/workflows/   # CI/CD Configuration
+└── README.md            # This File
+```
+
+### 🚀 Quick Start
+
+**For detailed documentation, please visit: [ffmpeg_cube_pkg/README.md](ffmpeg_cube_pkg/README.md)**
+
+#### Installation
+
+```yaml
+dependencies:
+  ffmpeg_cube: ^0.1.1
+```
+
+#### Basic Usage
+
+```dart
+import 'package:ffmpeg_cube/ffmpeg_cube.dart';
+
+final client = FFmpegCubeClient();
+
+// Transcode
+await client.transcode(TranscodeJob(
+  inputPath: '/input.mp4',
+  outputPath: '/output.mp4',
+  videoCodec: VideoCodec.h264,
+));
+
+// Media Probe
+final probe = await client.probe('/video.mp4');
+print('Duration: ${probe.data?.duration}');
+```
+
+### ✨ Features
+
+| Feature | Description |
+|---------|-------------|
+| 🎬 **Transcode** | Convert format, codec (H.264, H.265, VP9, etc.) |
+| ✂️ **Trim** | Cut video by time range |
+| 🖼️ **Thumbnail** | Extract static images from video |
+| 🔗 **Concat** | Merge multiple video clips |
+| 📝 **Subtitle** | Embed hard or soft subtitles |
+| 🎵 **Audio** | Extract audio, mix tracks |
+| ▶️ **Playback** | Unified cross-platform player interface |
+| 🧠 **Smart Policy** | Auto-select best codec settings |
+
+---
+
+<a name="中文"></a>
+## 中文
+
+**跨平台影音處理與播放 SDK for Flutter**  
+支援 **Android**、**iOS**、**macOS**、**Windows**、**Linux**、**Web** 六大平台。
+
+### 📂 專案結構
 
 ```
 ffmpeg_cube/
@@ -23,20 +101,18 @@ ffmpeg_cube/
 └── README.md            # 本文件
 ```
 
----
-
-## 🚀 快速開始
+### 🚀 快速開始
 
 **詳細文檔請參閱：[ffmpeg_cube_pkg/README.md](ffmpeg_cube_pkg/README.md)**
 
-### 安裝
+#### 安裝
 
 ```yaml
 dependencies:
-  ffmpeg_cube: ^0.1.0
+  ffmpeg_cube: ^0.1.1
 ```
 
-### 基本使用
+#### 基本使用
 
 ```dart
 import 'package:ffmpeg_cube/ffmpeg_cube.dart';
@@ -50,22 +126,12 @@ await client.transcode(TranscodeJob(
   videoCodec: VideoCodec.h264,
 ));
 
-// 裁剪
-await client.trim(TrimJob(
-  inputPath: '/video.mp4',
-  outputPath: '/clip.mp4',
-  startTime: Duration(seconds: 10),
-  duration: Duration(seconds: 30),
-));
-
 // 探測媒體資訊
 final probe = await client.probe('/video.mp4');
 print('Duration: ${probe.data?.duration}');
 ```
 
----
-
-## ✨ 功能亮點
+### ✨ 功能亮點
 
 | 功能 | 說明 |
 |------|------|

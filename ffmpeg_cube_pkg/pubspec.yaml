@@ -1,6 +1,6 @@
 name: ffmpeg_cube
 description: "Cross-platform audio/video processing and playback SDK for Flutter. 跨平台影音處理與播放 SDK，支援轉檔、裁剪、縮圖、合併、混音、字幕、播放等功能。"
-version: 0.1.1
+version: 0.1.2
 
 homepage: https://github.com/ImL1s/ffmpeg_cube/tree/master/ffmpeg_cube_pkg
 repository: https://github.com/ImL1s/ffmpeg_cube

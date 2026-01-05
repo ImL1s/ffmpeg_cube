@@ -1,7 +1,7 @@
 # FFmpeg Cube
 
 <p align="center">
-  <strong>跨平台影音處理與播放 SDK for Flutter</strong>
+  <strong>Cross-platform Audio/Video Processing & Playback SDK for Flutter</strong>
 </p>
 
 <p align="center">
@@ -10,13 +10,148 @@
   <a href="https://opensource.org/licenses/BSD-3-Clause"><img src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg" alt="License"></a>
 </p>
 
-支援 **Android**、**iOS**、**macOS**、**Windows**、**Linux**、**Web** 六大平台。
+[English](#english) | [中文](#中文)
 
 ---
 
-## ✨ 功能特色
+<a name="english"></a>
+## English
 
-### 🎬 影音處理
+Supports **Android**, **iOS**, **macOS**, **Windows**, **Linux**, and **Web**.
+
+### ✨ Features
+
+#### 🎬 Media Processing
+| Feature | Description | Example |
+|---------|-------------|---------|
+| **Transcode** | Convert formats, codecs | MP4 → WebM, H.264 → H.265 |
+| **Trim** | Cut video by time range | Extract 00:30 - 02:00 |
+| **Concat** | Merge multiple videos | Join intro, main content, outro |
+| **Thumbnail** | Extract static images | Generate preview cover |
+| **Subtitle** | Embed hard/soft subtitles | SRT/ASS embedding |
+| **Audio** | Extract audio, mix tracks | Background music mixing |
+
+#### 🎮 Playback
+- **Unified Interface**: Powered by `media_kit`.
+- **Streaming**: Supports local files and HTTP/HTTPS URLs.
+
+#### 🧠 Smart Features
+- **Format Policy**: Auto-selects best codec parameters based on platform.
+- **Backend Router**: Auto-selects FFmpegKit / Process / Wasm backend.
+- **Progress Callback**: Real-time progress tracking.
+
+### 📦 Installation
+
+```yaml
+dependencies:
+  ffmpeg_cube: ^0.1.0
+  # media_kit is required for playback
+  media_kit: ^1.1.10
+  media_kit_video: ^1.2.4
+```
+
+<details>
+<summary><b>Platform Specific Dependencies</b></summary>
+
+**Android / iOS / macOS**
+```yaml
+dependencies:
+  media_kit_libs_android_video: ^1.3.6
+  media_kit_libs_ios_video: ^1.1.4
+  media_kit_libs_macos_video: ^1.1.4
+```
+
+**Windows / Linux**
+```yaml
+dependencies:
+  media_kit_libs_windows_video: ^1.0.9
+  media_kit_libs_linux: ^1.1.3
+```
+*Note: Windows/Linux requires system FFmpeg installed and in PATH.*
+</details>
+
+### 🚀 Quick Start
+
+#### Initialization
+
+```dart
+import 'package:ffmpeg_cube/ffmpeg_cube.dart';
+import 'package:media_kit/media_kit.dart';
+
+void main() {
+  MediaKit.ensureInitialized();
+  runApp(MyApp());
+}
+```
+
+#### Create Client
+
+```dart
+// Default settings
+final client = FFmpegCubeClient();
+```
+
+### 📖 Examples
+
+#### 1. Transcode
+
+```dart
+final result = await client.transcode(
+  TranscodeJob(
+    inputPath: '/input.mov',
+    outputPath: '/output.mp4',
+    videoCodec: VideoCodec.h264,
+    audioCodec: AudioCodec.aac,
+    resolution: VideoResolution.r1080p,
+  ),
+  onProgress: (progress) {
+    print('Progress: ${progress.progressPercent}%');
+  },
+);
+```
+
+#### 2. Trim
+
+```dart
+await client.trim(TrimJob(
+  inputPath: '/video.mp4',
+  outputPath: '/clip.mp4',
+  startTime: Duration(seconds: 10),
+  duration: Duration(seconds: 30),
+));
+```
+
+#### 3. Thumbnail
+
+```dart
+await client.thumbnail(ThumbnailJob(
+  videoPath: '/video.mp4',
+  timePosition: Duration(seconds: 5),
+  outputImagePath: '/thumb.jpg',
+  quality: 2,
+));
+```
+
+### 🖥️ Platform Support
+
+| Feature | Android | iOS | macOS | Windows | Linux | Web |
+|---------|:-------:|:---:|:-----:|:-------:|:-----:|:---:|
+| Transcode | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ |
+| Playback | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+- ✅ Fully Supported
+- ⚠️ Limited Support (Web requires Remote API or ffmpeg.wasm)
+
+---
+
+<a name="中文"></a>
+## 中文
+
+支援 **Android**、**iOS**、**macOS**、**Windows**、**Linux**、**Web** 六大平台。
+
+### ✨ 功能特色
+
+#### 🎬 影音處理
 | 功能 | 說明 | 範例 |
 |------|------|------|
 | **轉檔** | 影片格式轉換、編碼調整 | MP4 → WebM, H.264 → H.265 |
@@ -26,18 +161,16 @@
 | **字幕** | 嵌入或軟編碼字幕 | SRT/ASS 字幕嵌入 |
 | **音訊** | 抽取音訊、混音 | 提取背景音樂、Podcast 混音 |
 
-### 🎮 播放支援
+#### 🎮 播放支援
 - **跨平台統一介面** - 基於 `media_kit` 封裝
 - **串流支援** - 本地檔案、HTTP/HTTPS URL
 
-### 🧠 智慧功能
+#### 🧠 智慧功能
 - **策略引擎** - 根據平台和需求自動選擇最佳編碼參數
 - **平台路由** - 自動選擇 FFmpegKit / Process / Wasm 後端
 - **進度回調** - 實時追蹤處理進度與預估剩餘時間
 
----
-
-## 📦 安裝
+### 📦 安裝
 
 ```yaml
 dependencies:
@@ -47,36 +180,29 @@ dependencies:
   media_kit_video: ^1.2.4
 ```
 
-### 平台特定依賴
-
 <details>
-<summary><b>Android / iOS / macOS</b></summary>
+<summary><b>平台特定依賴</b></summary>
 
+**Android / iOS / macOS**
 ```yaml
 dependencies:
   media_kit_libs_android_video: ^1.3.6
   media_kit_libs_ios_video: ^1.1.4
   media_kit_libs_macos_video: ^1.1.4
 ```
-</details>
 
-<details>
-<summary><b>Windows / Linux</b></summary>
-
+**Windows / Linux**
 ```yaml
 dependencies:
   media_kit_libs_windows_video: ^1.0.9
   media_kit_libs_linux: ^1.1.3
 ```
-
 **注意**: Windows/Linux 需要系統安裝 FFmpeg 並加入 PATH。
 </details>
 
----
+### 🚀 快速開始
 
-## 🚀 快速開始
-
-### 初始化
+#### 初始化
 
 ```dart
 import 'package:ffmpeg_cube/ffmpeg_cube.dart';
@@ -89,7 +215,7 @@ void main() {
 }
 ```
 
-### 建立 Client
+#### 建立 Client
 
 ```dart
 // 使用預設設定
@@ -102,11 +228,9 @@ final client = FFmpegCubeClient(
 );
 ```
 
----
+### 📖 使用範例
 
-## 📖 使用範例
-
-### 1. 影片轉檔
+#### 1. 影片轉檔
 
 ```dart
 final result = await client.transcode(
@@ -132,7 +256,7 @@ if (result.success) {
 }
 ```
 
-### 2. 影片裁剪
+#### 2. 影片裁剪
 
 ```dart
 // 方法一：指定開始時間和持續時間
@@ -153,7 +277,7 @@ await client.trim(TrimJob(
 ));
 ```
 
-### 3. 擷取縮圖
+#### 3. 擷取縮圖
 
 ```dart
 // 單張縮圖
@@ -175,7 +299,7 @@ await client.thumbnail(ThumbnailJob(
 ));
 ```
 
-### 4. 影片合併
+#### 4. 影片合併
 
 ```dart
 // 使用 demuxer 方法（快速，要求相同編碼）
@@ -199,7 +323,7 @@ await client.concat(ConcatJob(
 ));
 ```
 
-### 5. 字幕嵌入
+#### 5. 字幕嵌入
 
 ```dart
 // 硬字幕（燒錄進影片）
@@ -221,7 +345,7 @@ await client.addSubtitle(SubtitleJob(
 ));
 ```
 
-### 6. 音訊混音
+#### 6. 音訊混音
 
 ```dart
 // 混合背景音樂和人聲
@@ -238,7 +362,7 @@ await client.mixAudio(MixAudioJob(
 ));
 ```
 
-### 7. 提取音訊
+#### 7. 提取音訊
 
 ```dart
 await client.extractAudio(
@@ -249,7 +373,7 @@ await client.extractAudio(
 );
 ```
 
-### 8. 媒體探測
+#### 8. 媒體探測
 
 ```dart
 final probe = await client.probe('/videos/sample.mp4');
@@ -277,7 +401,7 @@ if (probe.success) {
 }
 ```
 
-### 9. 影片播放
+#### 9. 影片播放
 
 ```dart
 class VideoPlayerWidget extends StatefulWidget {
@@ -337,7 +461,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 }
 ```
 
-### 10. 智能格式策略
+#### 10. 智能格式策略
 
 ```dart
 // 獲取針對當前平台的最佳編碼建議
@@ -359,9 +483,7 @@ await client.transcode(TranscodeJob(
 ));
 ```
 
----
-
-## 🖥️ 平台支援
+### 🖥️ 平台支援
 
 | 功能 | Android | iOS | macOS | Windows | Linux | Web |
 |------|:-------:|:---:|:-----:|:-------:|:-----:|:---:|
@@ -374,11 +496,9 @@ await client.transcode(TranscodeJob(
 | 播放 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 - ✅ 完整支援
-- ⚠️ 有限支援 (Web 需使用 Remote API 或 ffmpeg.wasm)
+- ⚠️ 有限支援 (Web 需使用遠端 API 或 ffmpeg.wasm)
 
----
-
-## ⚙️ 後端架構
+### ⚙️ 後端架構
 
 ```mermaid
 graph TD
@@ -402,11 +522,9 @@ graph TD
 | Windows/Linux | `Process` | 調用系統 FFmpeg CLI |
 | Web | `Wasm` / `Remote` | ffmpeg.wasm 或遠端 API |
 
----
+### 🔧 進階配置
 
-## 🔧 進階配置
-
-### 自訂 FFmpeg 路徑
+#### 自訂 FFmpeg 路徑
 
 ```dart
 final client = FFmpegCubeClient(
@@ -414,7 +532,7 @@ final client = FFmpegCubeClient(
 );
 ```
 
-### 使用遠端後端
+#### 使用遠端後端
 
 ```dart
 final client = FFmpegCubeClient(
@@ -423,7 +541,7 @@ final client = FFmpegCubeClient(
 );
 ```
 
-### 自訂格式策略
+#### 自訂格式策略
 
 ```dart
 final client = FFmpegCubeClient(
@@ -438,15 +556,11 @@ final client = FFmpegCubeClient(
 );
 ```
 
----
-
-## 📄 授權
+### 📄 授權
 
 BSD-3-Clause License
 
----
-
-## 🔗 相關連結
+### 🔗 相關連結
 
 - [GitHub Repository](https://github.com/ImL1s/ffmpeg_cube)
 - [API 文檔](https://pub.dev/documentation/ffmpeg_cube/latest/)
