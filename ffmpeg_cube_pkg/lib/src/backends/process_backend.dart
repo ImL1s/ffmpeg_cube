@@ -11,23 +11,23 @@ import '../models/probe_result.dart';
 class ProcessBackend implements FFmpegBackend {
   /// Path to FFmpeg binary (uses 'ffmpeg' from PATH if null)
   final String? ffmpegPath;
-  
+
   /// Path to FFprobe binary (uses 'ffprobe' from PATH if null)
   final String? ffprobePath;
-  
+
   Process? _currentProcess;
-  
+
   ProcessBackend({
     this.ffmpegPath,
     this.ffprobePath,
   });
-  
+
   String get _ffmpegCommand => ffmpegPath ?? 'ffmpeg';
   String get _ffprobeCommand => ffprobePath ?? 'ffprobe';
-  
+
   @override
   BackendType get type => BackendType.process;
-  
+
   @override
   Future<bool> isAvailable() async {
     try {
@@ -37,7 +37,7 @@ class ProcessBackend implements FFmpegBackend {
       return false;
     }
   }
-  
+
   @override
   Future<JobResult<void>> execute(
     List<String> args, {
@@ -50,13 +50,13 @@ class ProcessBackend implements FFmpegBackend {
         args,
         runInShell: Platform.isWindows,
       );
-      
+
       final outputBuffer = StringBuffer();
-      
+
       // FFmpeg outputs progress to stderr
       _currentProcess!.stderr.transform(utf8.decoder).listen((data) {
         outputBuffer.write(data);
-        
+
         // Parse progress from output
         if (onProgress != null) {
           final lines = data.split('\n');
@@ -73,15 +73,15 @@ class ProcessBackend implements FFmpegBackend {
           }
         }
       });
-      
+
       // Also capture stdout
       _currentProcess!.stdout.transform(utf8.decoder).listen((data) {
         outputBuffer.write(data);
       });
-      
+
       final exitCode = await _currentProcess!.exitCode;
       _currentProcess = null;
-      
+
       if (exitCode == 0) {
         return JobResult.success();
       } else {
@@ -98,24 +98,27 @@ class ProcessBackend implements FFmpegBackend {
       ));
     }
   }
-  
+
   @override
   Future<JobResult<ProbeResult>> probe(String filePath) async {
     try {
       final result = await Process.run(
         _ffprobeCommand,
         [
-          '-v', 'quiet',
-          '-print_format', 'json',
+          '-v',
+          'quiet',
+          '-print_format',
+          'json',
           '-show_format',
           '-show_streams',
           filePath,
         ],
         runInShell: Platform.isWindows,
       );
-      
+
       if (result.exitCode == 0) {
-        final json = jsonDecode(result.stdout as String) as Map<String, dynamic>;
+        final json =
+            jsonDecode(result.stdout as String) as Map<String, dynamic>;
         return JobResult.success(
           data: ProbeResult.fromJson(filePath, json),
         );
@@ -133,13 +136,13 @@ class ProcessBackend implements FFmpegBackend {
       ));
     }
   }
-  
+
   @override
   Future<void> cancel() async {
     _currentProcess?.kill();
     _currentProcess = null;
   }
-  
+
   @override
   void dispose() {
     cancel();

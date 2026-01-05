@@ -14,10 +14,10 @@ import '../models/probe_result.dart';
 /// Backend using FFmpegKit for Android/iOS/macOS
 class FFmpegKitBackend implements FFmpegBackend {
   int? _currentSessionId;
-  
+
   @override
   BackendType get type => BackendType.ffmpegKit;
-  
+
   @override
   Future<bool> isAvailable() async {
     try {
@@ -28,7 +28,7 @@ class FFmpegKitBackend implements FFmpegBackend {
       return false;
     }
   }
-  
+
   @override
   Future<JobResult<void>> execute(
     List<String> args, {
@@ -37,7 +37,7 @@ class FFmpegKitBackend implements FFmpegBackend {
   }) async {
     try {
       final command = args.join(' ');
-      
+
       final session = await FFmpegKit.executeAsync(
         command,
         (session) async {
@@ -52,13 +52,14 @@ class FFmpegKitBackend implements FFmpegBackend {
           if (onProgress != null) {
             final time = statistics.getTime();
             final currentTime = Duration(milliseconds: time.toInt());
-            
+
             double progress = 0.0;
             if (totalDuration != null && totalDuration.inMilliseconds > 0) {
-              progress = currentTime.inMilliseconds / totalDuration.inMilliseconds;
+              progress =
+                  currentTime.inMilliseconds / totalDuration.inMilliseconds;
               progress = progress.clamp(0.0, 1.0);
             }
-            
+
             onProgress(JobProgress(
               progress: progress,
               currentTime: currentTime,
@@ -70,14 +71,14 @@ class FFmpegKitBackend implements FFmpegBackend {
           }
         },
       );
-      
+
       _currentSessionId = session.getSessionId();
-      
+
       // Wait for completion
       await session.getAllLogs();
-      
+
       final returnCode = await session.getReturnCode();
-      
+
       if (ReturnCode.isSuccess(returnCode)) {
         return JobResult.success();
       } else if (ReturnCode.isCancel(returnCode)) {
@@ -97,16 +98,15 @@ class FFmpegKitBackend implements FFmpegBackend {
       ));
     }
   }
-  
+
   @override
   Future<JobResult<ProbeResult>> probe(String filePath) async {
     try {
       final session = await FFprobeKit.execute(
-        '-v quiet -print_format json -show_format -show_streams "$filePath"'
-      );
-      
+          '-v quiet -print_format json -show_format -show_streams "$filePath"');
+
       final returnCode = await session.getReturnCode();
-      
+
       if (ReturnCode.isSuccess(returnCode)) {
         final output = await session.getOutput() ?? '{}';
         final json = jsonDecode(output) as Map<String, dynamic>;
@@ -128,7 +128,7 @@ class FFmpegKitBackend implements FFmpegBackend {
       ));
     }
   }
-  
+
   @override
   Future<void> cancel() async {
     if (_currentSessionId != null) {
@@ -136,7 +136,7 @@ class FFmpegKitBackend implements FFmpegBackend {
       _currentSessionId = null;
     }
   }
-  
+
   @override
   void dispose() {
     cancel();

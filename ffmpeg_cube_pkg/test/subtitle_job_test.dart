@@ -10,7 +10,7 @@ void main() {
         subtitlePath: '/sub.srt',
         outputPath: '/output.mp4',
       );
-      
+
       expect(job.validate(), true);
     });
 
@@ -20,7 +20,7 @@ void main() {
         subtitlePath: '/sub.srt',
         outputPath: '/output.mp4',
       );
-      
+
       expect(job.validate(), false);
     });
 
@@ -30,7 +30,7 @@ void main() {
         subtitlePath: '',
         outputPath: '/output.mp4',
       );
-      
+
       expect(job.validate(), false);
     });
 
@@ -40,7 +40,7 @@ void main() {
         subtitlePath: '/sub.srt',
         outputPath: '',
       );
-      
+
       expect(job.validate(), false);
     });
   });
@@ -53,11 +53,12 @@ void main() {
         outputPath: '/output.mp4',
         embedType: SubtitleEmbedType.hardcode,
       );
-      
+
       final args = job.toFFmpegArgs();
       final argsString = args.join(' ');
-      
-      expect(argsString.contains('subtitles') || argsString.contains('ass'), true);
+
+      expect(
+          argsString.contains('subtitles') || argsString.contains('ass'), true);
     });
 
     test('Font size is applied in hardcode mode', () {
@@ -68,11 +69,12 @@ void main() {
         embedType: SubtitleEmbedType.hardcode,
         fontSize: 24,
       );
-      
+
       final args = job.toFFmpegArgs();
       final argsString = args.join(' ');
-      
-      expect(argsString.contains('24') || argsString.contains('FontSize'), true);
+
+      expect(
+          argsString.contains('24') || argsString.contains('FontSize'), true);
     });
   });
 
@@ -84,9 +86,9 @@ void main() {
         outputPath: '/output.mkv',
         embedType: SubtitleEmbedType.softcode,
       );
-      
+
       final args = job.toFFmpegArgs();
-      
+
       // Softcode should have multiple inputs
       expect(args.where((a) => a == '-i').length, 2);
     });
@@ -99,7 +101,7 @@ void main() {
         subtitlePath: '/subtitle.srt',
         outputPath: '/output.mp4',
       );
-      
+
       expect(job.validate(), true);
     });
 
@@ -109,7 +111,7 @@ void main() {
         subtitlePath: '/subtitle.ass',
         outputPath: '/output.mp4',
       );
-      
+
       expect(job.validate(), true);
     });
 
@@ -119,7 +121,7 @@ void main() {
         subtitlePath: '/subtitle.vtt',
         outputPath: '/output.mp4',
       );
-      
+
       expect(job.validate(), true);
     });
   });

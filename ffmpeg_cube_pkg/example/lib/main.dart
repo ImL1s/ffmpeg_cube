@@ -4,10 +4,10 @@ import 'screens/home_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize media_kit for video playback
   MediaKit.ensureInitialized();
-  
+
   runApp(const FFmpegCubeExampleApp());
 }
 

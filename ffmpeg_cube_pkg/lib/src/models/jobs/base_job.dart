@@ -2,22 +2,22 @@
 abstract class BaseJob {
   /// Unique identifier for this job
   final String id;
-  
+
   /// Optional description for this job
   final String? description;
-  
+
   /// Additional FFmpeg arguments to pass
   final List<String>? additionalArgs;
-  
+
   BaseJob({
     String? id,
     this.description,
     this.additionalArgs,
   }) : id = id ?? DateTime.now().millisecondsSinceEpoch.toString();
-  
+
   /// Convert job to FFmpeg arguments
   List<String> toFFmpegArgs();
-  
+
   /// Validate the job parameters
   bool validate();
 }
@@ -31,7 +31,7 @@ enum VideoCodec {
   av1('libaom-av1'),
   mpeg4('mpeg4'),
   copy('copy');
-  
+
   final String ffmpegName;
   const VideoCodec(this.ffmpegName);
 }
@@ -44,7 +44,7 @@ enum AudioCodec {
   vorbis('libvorbis'),
   flac('flac'),
   copy('copy');
-  
+
   final String ffmpegName;
   const AudioCodec(this.ffmpegName);
 }
@@ -58,7 +58,7 @@ enum ContainerFormat {
   avi('avi'),
   m4a('m4a'),
   mp3('mp3');
-  
+
   final String ffmpegName;
   const ContainerFormat(this.ffmpegName);
 }
@@ -71,10 +71,10 @@ enum VideoResolution {
   r1080p(1920, 1080),
   r1440p(2560, 1440),
   r2160p(3840, 2160);
-  
+
   final int width;
   final int height;
   const VideoResolution(this.width, this.height);
-  
+
   String get ffmpegScale => 'scale=$width:$height';
 }

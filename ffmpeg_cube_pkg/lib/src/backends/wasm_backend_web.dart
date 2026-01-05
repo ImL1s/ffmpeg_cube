@@ -5,7 +5,7 @@ import 'dart:js_interop';
 import 'dart:typed_data';
 
 /// Web implementation using ffmpeg.wasm
-/// 
+///
 /// This is a simplified implementation that provides the basic interface.
 /// Full implementation requires loading ffmpeg.wasm in index.html.
 
@@ -15,12 +15,12 @@ Future<bool> isWasmAvailable() async {
   if (!_hasSharedArrayBuffer()) {
     return false;
   }
-  
+
   // Check if FFmpegWASM global is available
   if (!_hasFFmpegWasm()) {
     return false;
   }
-  
+
   return true;
 }
 
@@ -47,7 +47,7 @@ bool _hasFFmpegWasm() {
 }
 
 /// Execute ffmpeg command
-/// 
+///
 /// Note: This is a placeholder. Full implementation requires:
 /// 1. Creating FFmpeg instance via JS interop
 /// 2. Loading the FFmpeg core
@@ -59,19 +59,15 @@ Future<void> executeWasm(
   bool Function()? isCancelled,
 }) async {
   if (!await isWasmAvailable()) {
-    throw UnsupportedError(
-      'ffmpeg.wasm is not available. Ensure:\n'
-      '1. ffmpeg.wasm script is loaded in index.html\n'
-      '2. COOP/COEP headers are set on your server'
-    );
+    throw UnsupportedError('ffmpeg.wasm is not available. Ensure:\n'
+        '1. ffmpeg.wasm script is loaded in index.html\n'
+        '2. COOP/COEP headers are set on your server');
   }
-  
+
   // TODO: Implement actual ffmpeg.wasm execution
   // This requires complex JS interop with the ffmpeg.wasm library
-  throw UnimplementedError(
-    'ffmpeg.wasm execution not yet implemented. '
-    'Use RemoteBackend for web processing.'
-  );
+  throw UnimplementedError('ffmpeg.wasm execution not yet implemented. '
+      'Use RemoteBackend for web processing.');
 }
 
 /// Probe a media file
@@ -79,7 +75,7 @@ Future<Map<String, dynamic>> probeWasm(String filePath) async {
   if (!await isWasmAvailable()) {
     throw UnsupportedError('ffmpeg.wasm is not available');
   }
-  
+
   // TODO: Implement ffprobe via ffmpeg.wasm
   throw UnimplementedError('ffmpeg.wasm probing not yet implemented');
 }
@@ -89,7 +85,7 @@ Future<void> writeFileWasm(String path, Uint8List data) async {
   if (!await isWasmAvailable()) {
     throw UnsupportedError('ffmpeg.wasm is not available');
   }
-  
+
   // TODO: Write to ffmpeg.wasm FS
   throw UnimplementedError('ffmpeg.wasm file write not yet implemented');
 }
@@ -99,7 +95,7 @@ Future<Uint8List> readFileWasm(String path) async {
   if (!await isWasmAvailable()) {
     throw UnsupportedError('ffmpeg.wasm is not available');
   }
-  
+
   // TODO: Read from ffmpeg.wasm FS
   throw UnimplementedError('ffmpeg.wasm file read not yet implemented');
 }
@@ -107,7 +103,7 @@ Future<Uint8List> readFileWasm(String path) async {
 /// Delete file from virtual filesystem
 Future<void> deleteFileWasm(String path) async {
   if (!await isWasmAvailable()) return;
-  
+
   // TODO: Delete from ffmpeg.wasm FS
 }
 

@@ -21,7 +21,7 @@ void main() {
 
     test('Policy returns cross-platform recommendation by default', () {
       final recommendation = client.getRecommendation();
-      
+
       expect(recommendation.videoCodec, VideoCodec.h264);
       expect(recommendation.audioCodec, AudioCodec.aac);
       expect(recommendation.container, ContainerFormat.mp4);
@@ -34,7 +34,7 @@ void main() {
         inputPath: '/path/to/input.mp4',
         outputPath: '/path/to/output.mp4',
       );
-      
+
       expect(job.validate(), true);
     });
 
@@ -43,7 +43,7 @@ void main() {
         inputPath: '',
         outputPath: '/path/to/output.mp4',
       );
-      
+
       expect(job.validate(), false);
     });
 
@@ -52,7 +52,7 @@ void main() {
         inputPath: '/path/to/input.mp4',
         outputPath: '',
       );
-      
+
       expect(job.validate(), false);
     });
 
@@ -65,9 +65,9 @@ void main() {
         resolution: VideoResolution.r1080p,
         videoBitrate: '5M',
       );
-      
+
       final args = job.toFFmpegArgs();
-      
+
       expect(args.contains('-i'), true);
       expect(args.contains('/input.mp4'), true);
       expect(args.contains('-c:v'), true);
@@ -88,7 +88,7 @@ void main() {
         startTime: Duration.zero,
         duration: const Duration(seconds: 10),
       );
-      
+
       expect(job.validate(), true);
     });
 
@@ -99,7 +99,7 @@ void main() {
         startTime: const Duration(seconds: -5),
         duration: const Duration(seconds: 10),
       );
-      
+
       expect(job.validate(), false);
     });
   });
@@ -111,7 +111,7 @@ void main() {
         timePosition: const Duration(seconds: 5),
         outputImagePath: '/thumb.jpg',
       );
-      
+
       expect(job.validate(), true);
     });
 
@@ -121,7 +121,7 @@ void main() {
         timePosition: const Duration(seconds: -1),
         outputImagePath: '/thumb.jpg',
       );
-      
+
       expect(job.validate(), false);
     });
   });
@@ -132,7 +132,7 @@ void main() {
         inputPaths: ['/a.mp4', '/b.mp4'],
         outputPath: '/out.mp4',
       );
-      
+
       expect(job.validate(), true);
     });
 
@@ -141,18 +141,20 @@ void main() {
         inputPaths: ['/a.mp4'],
         outputPath: '/out.mp4',
       );
-      
+
       expect(job.validate(), false);
     });
   });
 
   group('JobProgress Parsing', () {
     test('Parses standard FFmpeg output correctly', () {
-      const line = 'frame=  500 fps=30 q=28.0 size=   5000kB time=00:00:16.67 bitrate=2456.7kbits/s speed=1.00x';
+      const line =
+          'frame=  500 fps=30 q=28.0 size=   5000kB time=00:00:16.67 bitrate=2456.7kbits/s speed=1.00x';
       final duration = const Duration(seconds: 30);
-      
-      final progress = JobProgress.fromFFmpegOutput(line, totalDuration: duration);
-      
+
+      final progress =
+          JobProgress.fromFFmpegOutput(line, totalDuration: duration);
+
       expect(progress, isNotNull);
       expect(progress!.currentFrame, 500);
       expect(progress.currentTime?.inSeconds, 16);
@@ -162,9 +164,9 @@ void main() {
 
     test('Returns null for non-progress lines', () {
       const line = 'Input #0, mov,mp4,m4a,3gp,3g2,mj2, from "input.mp4":';
-      
+
       final progress = JobProgress.fromFFmpegOutput(line);
-      
+
       expect(progress, isNull);
     });
   });
@@ -173,7 +175,7 @@ void main() {
     test('Cross-platform mode returns H.264/AAC', () {
       final policy = FormatPolicy(mode: FormatPolicyMode.crossPlatform);
       final rec = policy.getRecommendation();
-      
+
       expect(rec.videoCodec, VideoCodec.h264);
       expect(rec.audioCodec, AudioCodec.aac);
     });
@@ -181,14 +183,14 @@ void main() {
     test('Quality mode returns H.265', () {
       final policy = FormatPolicy(mode: FormatPolicyMode.quality);
       final rec = policy.getRecommendation();
-      
+
       expect(rec.videoCodec, VideoCodec.h265);
     });
 
     test('Compression mode returns H.265/Opus', () {
       final policy = FormatPolicy(mode: FormatPolicyMode.compression);
       final rec = policy.getRecommendation();
-      
+
       expect(rec.videoCodec, VideoCodec.h265);
       expect(rec.audioCodec, AudioCodec.opus);
     });
@@ -196,7 +198,7 @@ void main() {
     test('Speed mode returns copy codec', () {
       final policy = FormatPolicy(mode: FormatPolicyMode.speed);
       final rec = policy.getRecommendation();
-      
+
       expect(rec.videoCodec, VideoCodec.copy);
       expect(rec.audioCodec, AudioCodec.copy);
     });
@@ -204,7 +206,7 @@ void main() {
     test('Web target with compression returns WebM', () {
       final policy = FormatPolicy(mode: FormatPolicyMode.compression);
       final rec = policy.getRecommendation(isWebTarget: true);
-      
+
       expect(rec.container, ContainerFormat.webm);
     });
   });
@@ -229,9 +231,9 @@ void main() {
           },
         ],
       };
-      
+
       final result = ProbeResult.fromJson('/test.mp4', json);
-      
+
       expect(result.isVideo, true);
       expect(result.videoStream?.width, 1920);
       expect(result.videoStream?.height, 1080);
@@ -252,9 +254,9 @@ void main() {
           },
         ],
       };
-      
+
       final result = ProbeResult.fromJson('/test.mp3', json);
-      
+
       expect(result.hasAudio, true);
       expect(result.audioStream?.codec, 'aac');
       expect(result.audioStream?.sampleRate, 44100);
@@ -265,20 +267,20 @@ void main() {
   group('JobError', () {
     test('Creates validation error correctly', () {
       final error = JobError.validation('Invalid parameter');
-      
+
       expect(error.code, JobErrorCode.invalidParameters);
       expect(error.message.contains('Invalid parameter'), true);
     });
 
     test('Creates cancellation error correctly', () {
       final error = JobError.cancelled();
-      
+
       expect(error.code, JobErrorCode.cancelled);
     });
 
     test('Creates platform not supported error correctly', () {
       final error = JobError.platformNotSupported('Web');
-      
+
       expect(error.code, JobErrorCode.platformNotSupported);
       expect(error.message.contains('Web'), true);
     });

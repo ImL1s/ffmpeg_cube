@@ -14,32 +14,32 @@ class ThumbnailScreen extends StatefulWidget {
 
 class _ThumbnailScreenState extends State<ThumbnailScreen> {
   final FFmpegCubeClient _client = FFmpegCubeClient();
-  
+
   String? _inputPath;
   String? _thumbnailPath;
   bool _isProcessing = false;
   String? _error;
   Duration? _videoDuration;
   double _timePosition = 0; // 0.0 to 1.0
-  
+
   @override
   void dispose() {
     _client.dispose();
     super.dispose();
   }
-  
+
   Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.video,
     );
-    
+
     if (result != null && result.files.single.path != null) {
       setState(() {
         _inputPath = result.files.single.path;
         _thumbnailPath = null;
         _error = null;
       });
-      
+
       // Probe to get duration
       final probe = await _client.probe(_inputPath!);
       if (probe.success && probe.data?.duration != null) {
@@ -49,26 +49,29 @@ class _ThumbnailScreenState extends State<ThumbnailScreen> {
       }
     }
   }
-  
+
   Future<void> _extractThumbnail() async {
     if (_inputPath == null) return;
-    
+
     setState(() {
       _isProcessing = true;
       _error = null;
       _thumbnailPath = null;
     });
-    
+
     try {
       final tempDir = await getTemporaryDirectory();
-      final outputPath = p.join(tempDir.path, 'thumbnail_${DateTime.now().millisecondsSinceEpoch}.jpg');
-      
+      final outputPath = p.join(tempDir.path,
+          'thumbnail_${DateTime.now().millisecondsSinceEpoch}.jpg');
+
       // Calculate time position
       Duration timePos = Duration.zero;
       if (_videoDuration != null) {
-        timePos = Duration(milliseconds: (_videoDuration!.inMilliseconds * _timePosition).round());
+        timePos = Duration(
+            milliseconds:
+                (_videoDuration!.inMilliseconds * _timePosition).round());
       }
-      
+
       final job = ThumbnailJob(
         videoPath: _inputPath!,
         timePosition: timePos,
@@ -76,9 +79,9 @@ class _ThumbnailScreenState extends State<ThumbnailScreen> {
         format: ImageFormat.jpg,
         width: 640,
       );
-      
+
       final result = await _client.thumbnail(job);
-      
+
       if (result.success) {
         setState(() {
           _thumbnailPath = outputPath;
@@ -97,7 +100,7 @@ class _ThumbnailScreenState extends State<ThumbnailScreen> {
       });
     }
   }
-  
+
   String _formatDuration(Duration d) {
     final hours = d.inHours.toString().padLeft(2, '0');
     final minutes = (d.inMinutes % 60).toString().padLeft(2, '0');
@@ -109,9 +112,11 @@ class _ThumbnailScreenState extends State<ThumbnailScreen> {
   Widget build(BuildContext context) {
     Duration currentPosition = Duration.zero;
     if (_videoDuration != null) {
-      currentPosition = Duration(milliseconds: (_videoDuration!.inMilliseconds * _timePosition).round());
+      currentPosition = Duration(
+          milliseconds:
+              (_videoDuration!.inMilliseconds * _timePosition).round());
     }
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('縮圖擷取'),
@@ -130,7 +135,8 @@ class _ThumbnailScreenState extends State<ThumbnailScreen> {
                   children: [
                     const Text(
                       '選擇影片',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 12),
                     ElevatedButton.icon(
@@ -155,7 +161,7 @@ class _ThumbnailScreenState extends State<ThumbnailScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            
+
             // Time Position Slider
             if (_inputPath != null)
               Card(
@@ -166,7 +172,8 @@ class _ThumbnailScreenState extends State<ThumbnailScreen> {
                     children: [
                       const Text(
                         '選擇時間點',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 12),
                       Row(
@@ -175,12 +182,16 @@ class _ThumbnailScreenState extends State<ThumbnailScreen> {
                           Expanded(
                             child: Slider(
                               value: _timePosition,
-                              onChanged: _isProcessing ? null : (v) {
-                                setState(() => _timePosition = v);
-                              },
+                              onChanged: _isProcessing
+                                  ? null
+                                  : (v) {
+                                      setState(() => _timePosition = v);
+                                    },
                             ),
                           ),
-                          Text(_videoDuration != null ? _formatDuration(_videoDuration!) : '--:--:--'),
+                          Text(_videoDuration != null
+                              ? _formatDuration(_videoDuration!)
+                              : '--:--:--'),
                         ],
                       ),
                     ],
@@ -188,7 +199,7 @@ class _ThumbnailScreenState extends State<ThumbnailScreen> {
                 ),
               ),
             const SizedBox(height: 16),
-            
+
             // Thumbnail Preview
             if (_thumbnailPath != null)
               Card(
@@ -199,7 +210,8 @@ class _ThumbnailScreenState extends State<ThumbnailScreen> {
                     children: [
                       const Text(
                         '擷取結果',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 12),
                       ClipRRect(
@@ -218,7 +230,7 @@ class _ThumbnailScreenState extends State<ThumbnailScreen> {
                   ),
                 ),
               ),
-            
+
             // Error Message
             if (_error != null) ...[
               const SizedBox(height: 16),
@@ -230,19 +242,23 @@ class _ThumbnailScreenState extends State<ThumbnailScreen> {
                     children: [
                       const Icon(Icons.error, color: Colors.red),
                       const SizedBox(width: 12),
-                      Expanded(child: Text(_error!, style: const TextStyle(color: Colors.red))),
+                      Expanded(
+                          child: Text(_error!,
+                              style: const TextStyle(color: Colors.red))),
                     ],
                   ),
                 ),
               ),
             ],
-            
+
             const SizedBox(height: 24),
-            
+
             // Action Button
             ElevatedButton.icon(
-              onPressed: (_inputPath != null && !_isProcessing) ? _extractThumbnail : null,
-              icon: _isProcessing 
+              onPressed: (_inputPath != null && !_isProcessing)
+                  ? _extractThumbnail
+                  : null,
+              icon: _isProcessing
                   ? const SizedBox(
                       width: 20,
                       height: 20,

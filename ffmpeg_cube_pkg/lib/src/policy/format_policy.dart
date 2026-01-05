@@ -5,12 +5,16 @@ import '../backends/backend_router.dart';
 enum FormatPolicyMode {
   /// Prioritize cross-platform compatibility (H.264/AAC)
   crossPlatform,
+
   /// Prioritize quality
   quality,
+
   /// Prioritize small file size
   compression,
+
   /// Prioritize processing speed
   speed,
+
   /// Custom - use provided parameters
   custom,
 }
@@ -23,7 +27,7 @@ class CodecRecommendation {
   final String? videoBitrate;
   final String? audioBitrate;
   final VideoResolution? resolution;
-  
+
   const CodecRecommendation({
     required this.videoCodec,
     required this.audioCodec,
@@ -32,7 +36,7 @@ class CodecRecommendation {
     this.audioBitrate,
     this.resolution,
   });
-  
+
   /// Cross-platform compatible preset
   static const crossPlatform = CodecRecommendation(
     videoCodec: VideoCodec.h264,
@@ -41,7 +45,7 @@ class CodecRecommendation {
     videoBitrate: '2M',
     audioBitrate: '128k',
   );
-  
+
   /// High quality preset
   static const highQuality = CodecRecommendation(
     videoCodec: VideoCodec.h265,
@@ -50,7 +54,7 @@ class CodecRecommendation {
     videoBitrate: '8M',
     audioBitrate: '256k',
   );
-  
+
   /// High compression preset
   static const highCompression = CodecRecommendation(
     videoCodec: VideoCodec.h265,
@@ -59,14 +63,14 @@ class CodecRecommendation {
     videoBitrate: '1M',
     audioBitrate: '96k',
   );
-  
+
   /// Fast processing preset (copy codecs)
   static const fastCopy = CodecRecommendation(
     videoCodec: VideoCodec.copy,
     audioCodec: AudioCodec.copy,
     container: ContainerFormat.mp4,
   );
-  
+
   /// Web optimized preset
   static const webOptimized = CodecRecommendation(
     videoCodec: VideoCodec.vp9,
@@ -81,19 +85,19 @@ class CodecRecommendation {
 class FormatPolicy {
   /// Default policy mode
   final FormatPolicyMode mode;
-  
+
   /// Custom recommendation (for custom mode)
   final CodecRecommendation? customRecommendation;
-  
+
   /// Platform-specific overrides
   final Map<TargetPlatform, CodecRecommendation>? platformOverrides;
-  
+
   FormatPolicy({
     this.mode = FormatPolicyMode.crossPlatform,
     this.customRecommendation,
     this.platformOverrides,
   });
-  
+
   /// Get recommendation based on policy and platform
   CodecRecommendation getRecommendation({
     TargetPlatform? platform,
@@ -104,7 +108,7 @@ class FormatPolicy {
     if (platform != null && platformOverrides?.containsKey(platform) == true) {
       return platformOverrides![platform]!;
     }
-    
+
     // Web target gets special handling
     if (isWebTarget) {
       // VP9/WebM has good browser support, but H.264 is more universal
@@ -112,7 +116,7 @@ class FormatPolicy {
           ? CodecRecommendation.webOptimized
           : CodecRecommendation.crossPlatform;
     }
-    
+
     switch (mode) {
       case FormatPolicyMode.crossPlatform:
         return CodecRecommendation.crossPlatform;
@@ -126,7 +130,7 @@ class FormatPolicy {
         return customRecommendation ?? CodecRecommendation.crossPlatform;
     }
   }
-  
+
   /// Check if a codec is supported on the platform
   static bool isCodecSupported(VideoCodec codec, TargetPlatform platform) {
     switch (platform) {
@@ -143,12 +147,12 @@ class FormatPolicy {
         return true;
       case TargetPlatform.web:
         // Browser support varies
-        return codec == VideoCodec.h264 || 
-               codec == VideoCodec.vp8 || 
-               codec == VideoCodec.vp9;
+        return codec == VideoCodec.h264 ||
+            codec == VideoCodec.vp8 ||
+            codec == VideoCodec.vp9;
     }
   }
-  
+
   /// Get optimal resolution for platform
   static VideoResolution getOptimalResolution(TargetPlatform platform) {
     switch (platform) {
@@ -163,7 +167,7 @@ class FormatPolicy {
         return VideoResolution.r720p; // Lower for web bandwidth
     }
   }
-  
+
   /// Suggest output path extension based on container
   static String getExtension(ContainerFormat container) {
     switch (container) {

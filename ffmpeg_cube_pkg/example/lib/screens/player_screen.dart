@@ -13,41 +13,42 @@ class _PlayerScreenState extends State<PlayerScreen> {
   UnifiedPlayer? _player;
   String? _currentSource;
   bool _isLoading = false;
-  
+
   @override
   void initState() {
     super.initState();
     _player = UnifiedPlayer();
   }
-  
+
   @override
   void dispose() {
     _player?.dispose();
     super.dispose();
   }
-  
+
   Future<void> _pickAndPlayLocal() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.video,
     );
-    
+
     if (result != null && result.files.single.path != null) {
       await _playSource(result.files.single.path!);
     }
   }
-  
+
   Future<void> _playNetworkSample() async {
     // Sample video URL (Big Buck Bunny)
-    const sampleUrl = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+    const sampleUrl =
+        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
     await _playSource(sampleUrl);
   }
-  
+
   Future<void> _playSource(String source) async {
     setState(() {
       _isLoading = true;
       _currentSource = source;
     });
-    
+
     try {
       await _player?.open(source);
       setState(() => _isLoading = false);
@@ -90,7 +91,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                   )
                 : const Center(child: CircularProgressIndicator()),
           ),
-          
+
           // Info and Controls
           Container(
             padding: const EdgeInsets.all(16),
@@ -104,8 +105,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       child: Row(
                         children: [
                           Icon(
-                            _currentSource!.startsWith('http') 
-                                ? Icons.cloud 
+                            _currentSource!.startsWith('http')
+                                ? Icons.cloud
                                 : Icons.insert_drive_file,
                             color: Colors.grey,
                           ),
@@ -127,7 +128,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     ),
                   ),
                 const SizedBox(height: 12),
-                
+
                 // Playback Info
                 if (_player != null)
                   StreamBuilder<Duration>(
@@ -138,7 +139,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         builder: (context, durSnapshot) {
                           final pos = posSnapshot.data ?? Duration.zero;
                           final dur = durSnapshot.data ?? Duration.zero;
-                          
+
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -159,7 +160,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     },
                   ),
                 const SizedBox(height: 12),
-                
+
                 // Quick Actions
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -167,7 +168,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     IconButton(
                       icon: const Icon(Icons.replay_10),
                       iconSize: 36,
-                      onPressed: () => _player?.skipBackward(const Duration(seconds: 10)),
+                      onPressed: () =>
+                          _player?.skipBackward(const Duration(seconds: 10)),
                     ),
                     const SizedBox(width: 16),
                     StreamBuilder<bool>(
@@ -176,7 +178,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       builder: (context, snapshot) {
                         final isPlaying = snapshot.data ?? false;
                         return IconButton(
-                          icon: Icon(isPlaying ? Icons.pause_circle : Icons.play_circle),
+                          icon: Icon(isPlaying
+                              ? Icons.pause_circle
+                              : Icons.play_circle),
                           iconSize: 64,
                           color: Colors.deepPurple,
                           onPressed: () => _player?.playOrPause(),
@@ -187,7 +191,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     IconButton(
                       icon: const Icon(Icons.forward_10),
                       iconSize: 36,
-                      onPressed: () => _player?.skipForward(const Duration(seconds: 10)),
+                      onPressed: () =>
+                          _player?.skipForward(const Duration(seconds: 10)),
                     ),
                   ],
                 ),
@@ -198,7 +203,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
       ),
     );
   }
-  
+
   String _formatDuration(Duration d) {
     final hours = d.inHours.toString().padLeft(2, '0');
     final minutes = (d.inMinutes % 60).toString().padLeft(2, '0');
@@ -228,7 +233,8 @@ class _InfoChip extends StatelessWidget {
         Icon(icon, size: 20, color: Colors.grey),
         const SizedBox(height: 4),
         Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[500])),
-        Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        Text(value,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
       ],
     );
   }

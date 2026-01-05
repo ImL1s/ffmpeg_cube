@@ -1,5 +1,5 @@
 /// FFmpeg Cube - Cross-platform video/audio processing and playback SDK for Flutter
-/// 
+///
 /// This library provides a unified API for:
 /// - Video transcoding, trimming, and concatenation
 /// - Audio extraction and mixing
@@ -7,27 +7,27 @@
 /// - Subtitle embedding
 /// - Media file probing
 /// - Cross-platform video playback
-/// 
+///
 /// ## Getting Started
-/// 
+///
 /// ```dart
 /// import 'package:ffmpeg_cube/ffmpeg_cube.dart';
 /// import 'package:media_kit/media_kit.dart';
-/// 
+///
 /// void main() {
 ///   // Initialize media_kit for playback
 ///   MediaKit.ensureInitialized();
-///   
+///
 ///   runApp(MyApp());
 /// }
 /// ```
-/// 
+///
 /// ## Usage Examples
-/// 
+///
 /// ### Transcode Video
 /// ```dart
 /// final client = FFmpegCubeClient();
-/// 
+///
 /// final result = await client.transcode(TranscodeJob(
 ///   inputPath: '/path/to/input.mp4',
 ///   outputPath: '/path/to/output.mp4',
@@ -35,12 +35,12 @@
 ///   audioCodec: AudioCodec.aac,
 ///   resolution: VideoResolution.r1080p,
 /// ));
-/// 
+///
 /// if (result.success) {
 ///   print('Transcoding completed!');
 /// }
 /// ```
-/// 
+///
 /// ### Get Media Information
 /// ```dart
 /// final probeResult = await client.probe('/path/to/video.mp4');
@@ -49,12 +49,12 @@
 ///   print('Resolution: ${probeResult.data?.videoStream?.resolution}');
 /// }
 /// ```
-/// 
+///
 /// ### Play Video
 /// ```dart
 /// final player = UnifiedPlayer();
 /// await player.open('/path/to/video.mp4');
-/// 
+///
 /// // In your widget tree:
 /// UnifiedVideoPlayer(player: player)
 /// ```
@@ -78,7 +78,8 @@ export 'src/models/job_progress.dart';
 export 'src/models/job_error.dart';
 
 // Backends
-export 'src/backends/backend_router.dart' show BackendRouter, BackendType, TargetPlatform;
+export 'src/backends/backend_router.dart'
+    show BackendRouter, BackendType, TargetPlatform;
 
 // Policy
 export 'src/policy/format_policy.dart';

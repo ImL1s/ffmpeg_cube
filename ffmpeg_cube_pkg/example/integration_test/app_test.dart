@@ -13,7 +13,7 @@ void main() {
 
       // Verify home screen title
       expect(find.text('FFmpeg Cube Demo'), findsOneWidget);
-      
+
       // Verify all feature cards are displayed
       expect(find.text('轉檔'), findsOneWidget);
       expect(find.text('縮圖'), findsOneWidget);
@@ -110,7 +110,8 @@ void main() {
       expect(find.text('720p'), findsOneWidget);
     });
 
-    testWidgets('Start transcode button is disabled without file', (tester) async {
+    testWidgets('Start transcode button is disabled without file',
+        (tester) async {
       await tester.pumpWidget(const FFmpegCubeExampleApp());
       await tester.pumpAndSettle();
 
@@ -120,7 +121,7 @@ void main() {
       // Find and verify start button is disabled
       final startButton = find.text('開始轉檔');
       expect(startButton, findsOneWidget);
-      
+
       // The button should be disabled (parent ElevatedButton has null onPressed)
     });
   });

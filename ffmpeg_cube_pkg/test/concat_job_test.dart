@@ -9,7 +9,7 @@ void main() {
         inputPaths: ['/a.mp4', '/b.mp4'],
         outputPath: '/out.mp4',
       );
-      
+
       expect(job.validate(), true);
     });
 
@@ -18,7 +18,7 @@ void main() {
         inputPaths: ['/1.mp4', '/2.mp4', '/3.mp4', '/4.mp4', '/5.mp4'],
         outputPath: '/out.mp4',
       );
-      
+
       expect(job.validate(), true);
     });
 
@@ -27,7 +27,7 @@ void main() {
         inputPaths: [],
         outputPath: '/out.mp4',
       );
-      
+
       expect(job.validate(), false);
     });
 
@@ -36,7 +36,7 @@ void main() {
         inputPaths: ['/a.mp4'],
         outputPath: '/out.mp4',
       );
-      
+
       expect(job.validate(), false);
     });
 
@@ -45,7 +45,7 @@ void main() {
         inputPaths: ['/a.mp4', '/b.mp4'],
         outputPath: '',
       );
-      
+
       expect(job.validate(), false);
     });
   });
@@ -57,9 +57,9 @@ void main() {
         outputPath: '/out.mp4',
         method: ConcatMethod.demuxer,
       );
-      
+
       final args = job.toFFmpegArgs();
-      
+
       expect(args.contains('-f'), true);
       expect(args.contains('concat'), true);
     });
@@ -70,9 +70,9 @@ void main() {
         outputPath: '/out.mp4',
         method: ConcatMethod.demuxer,
       );
-      
+
       final args = job.toFFmpegArgs();
-      
+
       expect(args.contains('-safe'), true);
     });
   });
@@ -84,9 +84,9 @@ void main() {
         outputPath: '/out.mp4',
         method: ConcatMethod.filter,
       );
-      
+
       final args = job.toFFmpegArgs();
-      
+
       expect(args.contains('-filter_complex'), true);
     });
 
@@ -96,9 +96,9 @@ void main() {
         outputPath: '/out.mp4',
         method: ConcatMethod.filter,
       );
-      
+
       final args = job.toFFmpegArgs();
-      
+
       // Should have 3 -i flags
       int inputCount = 0;
       for (int i = 0; i < args.length; i++) {
@@ -117,9 +117,9 @@ void main() {
         videoCodec: VideoCodec.h264,
         audioCodec: AudioCodec.aac,
       );
-      
+
       final args = job.toFFmpegArgs();
-      
+
       expect(args.contains('-c:v'), true);
       expect(args.contains('-c:a'), true);
     });
@@ -131,9 +131,9 @@ void main() {
         inputPaths: ['/video1.mp4', '/video2.mp4', '/video3.mp4'],
         outputPath: '/out.mp4',
       );
-      
+
       final content = job.generateConcatFileContent();
-      
+
       expect(content.contains("file '/video1.mp4'"), true);
       expect(content.contains("file '/video2.mp4'"), true);
       expect(content.contains("file '/video3.mp4'"), true);

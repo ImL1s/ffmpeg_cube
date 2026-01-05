@@ -2,24 +2,34 @@
 enum JobErrorCode {
   /// Input file not found
   inputNotFound,
+
   /// Output path is not writable
   outputNotWritable,
+
   /// Unsupported format
   unsupportedFormat,
+
   /// Codec not available
   codecNotAvailable,
+
   /// FFmpeg execution failed
   ffmpegExecutionFailed,
+
   /// Job was cancelled
   cancelled,
+
   /// Invalid parameters
   invalidParameters,
+
   /// Out of memory
   outOfMemory,
+
   /// Platform not supported
   platformNotSupported,
+
   /// Permission denied
   permissionDenied,
+
   /// Unknown error
   unknown,
 }
@@ -28,19 +38,19 @@ enum JobErrorCode {
 class JobError implements Exception {
   /// Error code
   final JobErrorCode code;
-  
+
   /// Human-readable error message
   final String message;
-  
+
   /// Detailed description (may include FFmpeg output)
   final String? details;
-  
+
   /// FFmpeg return code (if applicable)
   final int? ffmpegReturnCode;
-  
+
   /// Stack trace when error occurred
   final StackTrace? stackTrace;
-  
+
   JobError({
     required this.code,
     required this.message,
@@ -48,7 +58,7 @@ class JobError implements Exception {
     this.ffmpegReturnCode,
     this.stackTrace,
   });
-  
+
   @override
   String toString() {
     var result = 'JobError(${code.name}): $message';
@@ -60,7 +70,7 @@ class JobError implements Exception {
     }
     return result;
   }
-  
+
   /// Create from FFmpeg execution failure
   factory JobError.ffmpegFailed({
     required int returnCode,
@@ -68,7 +78,7 @@ class JobError implements Exception {
   }) {
     String message;
     JobErrorCode code = JobErrorCode.ffmpegExecutionFailed;
-    
+
     // Try to parse common FFmpeg errors
     if (output.contains('No such file or directory')) {
       code = JobErrorCode.inputNotFound;
@@ -76,7 +86,8 @@ class JobError implements Exception {
     } else if (output.contains('Permission denied')) {
       code = JobErrorCode.permissionDenied;
       message = 'Permission denied';
-    } else if (output.contains('Unknown encoder') || output.contains('Encoder not found')) {
+    } else if (output.contains('Unknown encoder') ||
+        output.contains('Encoder not found')) {
       code = JobErrorCode.codecNotAvailable;
       message = 'Required codec is not available';
     } else if (output.contains('Invalid data found')) {
@@ -88,7 +99,7 @@ class JobError implements Exception {
     } else {
       message = 'FFmpeg execution failed';
     }
-    
+
     return JobError(
       code: code,
       message: message,
@@ -96,7 +107,7 @@ class JobError implements Exception {
       ffmpegReturnCode: returnCode,
     );
   }
-  
+
   /// Create from validation failure
   factory JobError.validation(String reason) {
     return JobError(
@@ -104,7 +115,7 @@ class JobError implements Exception {
       message: 'Invalid job parameters: $reason',
     );
   }
-  
+
   /// Create for platform not supported
   factory JobError.platformNotSupported(String platform) {
     return JobError(
@@ -112,7 +123,7 @@ class JobError implements Exception {
       message: 'This operation is not supported on $platform',
     );
   }
-  
+
   /// Create for cancelled job
   factory JobError.cancelled() {
     return JobError(
@@ -126,19 +137,19 @@ class JobError implements Exception {
 class JobResult<T> {
   /// Whether the job succeeded
   final bool success;
-  
+
   /// Result data (if successful)
   final T? data;
-  
+
   /// Error (if failed)
   final JobError? error;
-  
+
   /// Execution duration
   final Duration? executionTime;
-  
+
   /// Output path (if applicable)
   final String? outputPath;
-  
+
   JobResult._({
     required this.success,
     this.data,
@@ -146,7 +157,7 @@ class JobResult<T> {
     this.executionTime,
     this.outputPath,
   });
-  
+
   /// Create a successful result
   factory JobResult.success({
     T? data,
@@ -160,7 +171,7 @@ class JobResult<T> {
       outputPath: outputPath,
     );
   }
-  
+
   /// Create a failed result
   factory JobResult.failure(JobError error) {
     return JobResult._(
@@ -168,15 +179,16 @@ class JobResult<T> {
       error: error,
     );
   }
-  
+
   /// Get data or throw error
   T get dataOrThrow {
     if (success && data != null) {
       return data as T;
     }
-    throw error ?? JobError(
-      code: JobErrorCode.unknown,
-      message: 'No data available',
-    );
+    throw error ??
+        JobError(
+          code: JobErrorCode.unknown,
+          message: 'No data available',
+        );
   }
 }

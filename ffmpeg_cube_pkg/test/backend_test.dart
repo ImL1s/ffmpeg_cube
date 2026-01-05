@@ -6,7 +6,7 @@ void main() {
   group('BackendRouter', () {
     test('Creates BackendRouter with default preferences', () {
       final router = BackendRouter();
-      
+
       expect(router, isNotNull);
     });
 
@@ -14,7 +14,7 @@ void main() {
       final router = BackendRouter(
         remoteEndpoint: 'https://api.example.com',
       );
-      
+
       expect(router, isNotNull);
     });
 
@@ -23,7 +23,7 @@ void main() {
         preferredBackend: BackendType.remote,
         remoteEndpoint: 'https://api.example.com',
       );
-      
+
       expect(router, isNotNull);
     });
 
@@ -31,7 +31,7 @@ void main() {
       final router = BackendRouter(
         ffmpegPath: '/usr/bin/ffmpeg',
       );
-      
+
       expect(router, isNotNull);
     });
 
@@ -61,7 +61,7 @@ void main() {
   group('JobResult', () {
     test('Success result', () {
       final result = JobResult<String>.success(data: 'test');
-      
+
       expect(result.success, true);
       expect(result.data, 'test');
       expect(result.error, isNull);
@@ -71,7 +71,7 @@ void main() {
       final result = JobResult<String>.failure(
         JobError.validation('Invalid'),
       );
-      
+
       expect(result.success, false);
       expect(result.data, isNull);
       expect(result.error, isNotNull);
@@ -80,7 +80,7 @@ void main() {
 
     test('Success without data', () {
       final result = JobResult<void>.success();
-      
+
       expect(result.success, true);
     });
   });
@@ -88,20 +88,20 @@ void main() {
   group('JobError Types', () {
     test('Validation error', () {
       final error = JobError.validation('Bad input');
-      
+
       expect(error.code, JobErrorCode.invalidParameters);
       expect(error.message, contains('Bad input'));
     });
 
     test('Cancelled error', () {
       final error = JobError.cancelled();
-      
+
       expect(error.code, JobErrorCode.cancelled);
     });
 
     test('Platform not supported error', () {
       final error = JobError.platformNotSupported('TestPlatform');
-      
+
       expect(error.code, JobErrorCode.platformNotSupported);
       expect(error.message, contains('TestPlatform'));
     });
@@ -111,7 +111,7 @@ void main() {
         returnCode: 1,
         output: 'Error output',
       );
-      
+
       expect(error.code, JobErrorCode.ffmpegExecutionFailed);
       // Message contains error info
       expect(error.message, isNotEmpty);
@@ -122,7 +122,7 @@ void main() {
         code: JobErrorCode.inputNotFound,
         message: 'File not found',
       );
-      
+
       expect(error.code, JobErrorCode.inputNotFound);
     });
 
@@ -132,7 +132,7 @@ void main() {
         message: 'Unknown error',
         stackTrace: StackTrace.current,
       );
-      
+
       expect(error.stackTrace, isNotNull);
     });
   });

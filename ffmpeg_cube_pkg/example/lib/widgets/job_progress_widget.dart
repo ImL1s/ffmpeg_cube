@@ -22,12 +22,12 @@ class JobProgressWidget extends StatelessWidget {
     final seconds = (d.inSeconds % 60).toString().padLeft(2, '0');
     return '$minutes:$seconds';
   }
-  
+
   String _formatSpeed(double? speed) {
     if (speed == null) return '--';
     return '${speed.toStringAsFixed(2)}x';
   }
-  
+
   String _formatSize(int? bytes) {
     if (bytes == null) return '--';
     if (bytes < 1024) return '$bytes B';
@@ -59,14 +59,15 @@ class JobProgressWidget extends StatelessWidget {
                 const SizedBox(width: 12),
                 Text(
                   completed ? '處理完成' : (isProcessing ? '處理中...' : '準備中'),
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
-            
+
             if (progress != null || isProcessing) ...[
               const SizedBox(height: 16),
-              
+
               // Progress Bar
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
@@ -80,14 +81,15 @@ class JobProgressWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              
+
               // Progress Percentage
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     '${progress?.progressPercent ?? 0}%',
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   if (progress?.estimatedTimeRemaining != null)
                     Text(
@@ -97,7 +99,7 @@ class JobProgressWidget extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              
+
               // Stats Row
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -120,7 +122,7 @@ class JobProgressWidget extends StatelessWidget {
                 ],
               ),
             ],
-            
+
             // Output Path
             if (completed && outputPath != null) ...[
               const Divider(),
@@ -163,7 +165,8 @@ class _StatItem extends StatelessWidget {
         Icon(icon, size: 20, color: Colors.grey),
         const SizedBox(height: 4),
         Text(label, style: TextStyle(fontSize: 10, color: Colors.grey[500])),
-        Text(value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        Text(value,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
       ],
     );
   }

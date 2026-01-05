@@ -25,11 +25,13 @@ class HomeScreen extends StatelessWidget {
                 padding: EdgeInsets.all(16.0),
                 child: Column(
                   children: [
-                    Icon(Icons.video_library, size: 64, color: Colors.deepPurple),
+                    Icon(Icons.video_library,
+                        size: 64, color: Colors.deepPurple),
                     SizedBox(height: 8),
                     Text(
                       'FFmpeg Cube SDK',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       '跨平台影音處理與播放',
@@ -40,7 +42,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            
+
             // Feature Cards
             Expanded(
               child: GridView.count(
@@ -55,7 +57,8 @@ class HomeScreen extends StatelessWidget {
                     color: Colors.blue,
                     onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const TranscodeScreen()),
+                      MaterialPageRoute(
+                          builder: (_) => const TranscodeScreen()),
                     ),
                   ),
                   _FeatureCard(
@@ -65,7 +68,8 @@ class HomeScreen extends StatelessWidget {
                     color: Colors.green,
                     onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const ThumbnailScreen()),
+                      MaterialPageRoute(
+                          builder: (_) => const ThumbnailScreen()),
                     ),
                   ),
                   _FeatureCard(

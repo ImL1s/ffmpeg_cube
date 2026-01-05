@@ -26,7 +26,7 @@ void main() {
 
     test('Create transcode job with custom codec', () {
       final recommendation = client.getRecommendation();
-      
+
       final job = TranscodeJob(
         inputPath: '/videos/input.mp4',
         outputPath: '/videos/output.mp4',
@@ -47,7 +47,7 @@ void main() {
       );
 
       expect(job.validate(), true);
-      
+
       final args = job.toFFmpegArgs();
       expect(args.length, greaterThan(5));
       expect(args.contains('-y'), true);
@@ -64,7 +64,7 @@ void main() {
       );
 
       expect(job.validate(), true);
-      
+
       final args = job.toFFmpegArgs();
       expect(args.contains('-ss'), true);
       expect(args.contains('-t'), true);
@@ -95,7 +95,7 @@ void main() {
       );
 
       expect(job.validate(), true);
-      
+
       final args = job.toFFmpegArgs();
       expect(args.contains('-vframes'), true);
     });
@@ -133,7 +133,7 @@ void main() {
       );
 
       expect(job.validate(), true);
-      
+
       final args = job.toFFmpegArgs();
       expect(args.contains('-filter_complex'), true);
     });
@@ -170,7 +170,7 @@ void main() {
       );
 
       expect(job.validate(), true);
-      
+
       final args = job.toFFmpegArgs();
       expect(args.any((a) => a.contains('subtitle')), true);
     });
@@ -267,7 +267,7 @@ void main() {
         audioCodec: AudioCodec.opus,
         container: ContainerFormat.webm,
       );
-      
+
       final policy = FormatPolicy(
         mode: FormatPolicyMode.custom,
         customRecommendation: custom,

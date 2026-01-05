@@ -9,7 +9,7 @@ void main() {
         inputAudioPaths: ['/audio1.mp3', '/audio2.mp3'],
         outputPath: '/output.mp3',
       );
-      
+
       expect(job.validate(), true);
     });
 
@@ -18,7 +18,7 @@ void main() {
         inputAudioPaths: ['/audio1.mp3'],
         outputPath: '/output.mp3',
       );
-      
+
       expect(job.validate(), false);
     });
 
@@ -27,7 +27,7 @@ void main() {
         inputAudioPaths: ['/audio1.mp3', '/audio2.mp3'],
         outputPath: '',
       );
-      
+
       expect(job.validate(), false);
     });
 
@@ -37,10 +37,10 @@ void main() {
         outputPath: '/output.mp3',
         volumes: [0.5, 1.0],
       );
-      
+
       final args = job.toFFmpegArgs();
       final argsString = args.join(' ');
-      
+
       // Should contain volume filter
       expect(argsString.contains('volume'), true);
     });
@@ -52,9 +52,9 @@ void main() {
         inputAudioPaths: ['/a1.mp3', '/a2.mp3', '/a3.mp3'],
         outputPath: '/out.mp3',
       );
-      
+
       final args = job.toFFmpegArgs();
-      
+
       // Should have 3 input files
       int inputCount = 0;
       for (int i = 0; i < args.length; i++) {
@@ -68,9 +68,9 @@ void main() {
         inputAudioPaths: ['/a1.mp3', '/a2.mp3'],
         outputPath: '/out.mp3',
       );
-      
+
       final args = job.toFFmpegArgs();
-      
+
       expect(args.contains('-filter_complex'), true);
       expect(args.any((a) => a.contains('amix')), true);
     });
@@ -81,10 +81,10 @@ void main() {
         outputPath: '/out.mp3',
         normalize: true,
       );
-      
+
       final args = job.toFFmpegArgs();
       final argsString = args.join(' ');
-      
+
       expect(argsString.contains('loudnorm'), true);
     });
   });

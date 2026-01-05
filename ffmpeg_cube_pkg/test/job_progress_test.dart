@@ -34,11 +34,13 @@ void main() {
 
     test('Estimated time remaining from parsed output', () {
       // Use a progress line that will be parsed with speed
-      const line = 'frame= 300 fps=30 q=28.0 size=   1000kB time=00:00:30.00 bitrate=1000.0kbits/s speed=1.00x';
+      const line =
+          'frame= 300 fps=30 q=28.0 size=   1000kB time=00:00:30.00 bitrate=1000.0kbits/s speed=1.00x';
       final duration = const Duration(minutes: 1);
-      
-      final progress = JobProgress.fromFFmpegOutput(line, totalDuration: duration);
-      
+
+      final progress =
+          JobProgress.fromFFmpegOutput(line, totalDuration: duration);
+
       expect(progress, isNotNull);
       final remaining = progress!.estimatedTimeRemaining;
       expect(remaining, isNotNull);
@@ -48,11 +50,13 @@ void main() {
 
   group('JobProgress FFmpeg Parsing', () {
     test('Parse complete progress line', () {
-      const line = 'frame= 1500 fps=59.9 q=28.0 size=   25600kB time=00:00:50.00 bitrate=4198.2kbits/s dup=0 drop=0 speed=2.00x';
+      const line =
+          'frame= 1500 fps=59.9 q=28.0 size=   25600kB time=00:00:50.00 bitrate=4198.2kbits/s dup=0 drop=0 speed=2.00x';
       final duration = const Duration(minutes: 2);
-      
-      final progress = JobProgress.fromFFmpegOutput(line, totalDuration: duration);
-      
+
+      final progress =
+          JobProgress.fromFFmpegOutput(line, totalDuration: duration);
+
       expect(progress, isNotNull);
       expect(progress!.currentFrame, 1500);
       expect(progress.currentTime?.inSeconds, 50);
@@ -60,21 +64,24 @@ void main() {
     });
 
     test('Parse progress with milliseconds', () {
-      const line = 'frame=   30 fps=30 q=23.0 size=     256kB time=00:00:01.00 bitrate=2097.2kbits/s speed=1.00x';
-      
+      const line =
+          'frame=   30 fps=30 q=23.0 size=     256kB time=00:00:01.00 bitrate=2097.2kbits/s speed=1.00x';
+
       final progress = JobProgress.fromFFmpegOutput(line);
-      
+
       expect(progress, isNotNull);
       expect(progress!.currentFrame, 30);
       expect(progress.currentTime?.inSeconds, 1);
     });
 
     test('Parse progress with hours', () {
-      const line = 'frame=108000 fps=60 q=25.0 size= 1024000kB time=01:30:00.00 bitrate=1500.0kbits/s speed=1.50x';
+      const line =
+          'frame=108000 fps=60 q=25.0 size= 1024000kB time=01:30:00.00 bitrate=1500.0kbits/s speed=1.50x';
       final duration = const Duration(hours: 2);
-      
-      final progress = JobProgress.fromFFmpegOutput(line, totalDuration: duration);
-      
+
+      final progress =
+          JobProgress.fromFFmpegOutput(line, totalDuration: duration);
+
       expect(progress, isNotNull);
       expect(progress!.currentTime?.inHours, 1);
       expect(progress.currentTime?.inMinutes, 90);
