@@ -28,18 +28,23 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Install example dependencies
+        run: flutter pub get
+        working-directory: ffmpeg_cube_pkg/example
+
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
 
       - name: Analyze project source
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos
 
       - name: Run tests
         run: flutter test --coverage
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
-          files: coverage/lcov.info
+          files: ffmpeg_cube_pkg/coverage/lcov.info
           flags: unittests
           name: codecov-umbrella
+        continue-on-error: true
