@@ -380,6 +380,22 @@ await client.transcode(TranscodeJob(
 
 ## ⚙️ 後端架構
 
+```mermaid
+graph TD
+    Client[FFmpegCubeClient] --> Router[BackendRouter]
+    Router --> Policy[FormatPolicy]
+    
+    Router -->|Mobile| Kit[FFmpegKitBackend]
+    Router -->|Desktop| Process[ProcessBackend]
+    Router -->|Web| Wasm[WasmBackend]
+    Router -->|Fallback| Remote[RemoteBackend]
+    
+    Kit --> Gen[Platform Channel]
+    Process --> CLI[FFmpeg CLI]
+    Wasm --> JS[ffmpeg.wasm]
+    Remote --> API[REST / WebSocket]
+```
+
 | 平台 | 後端引擎 | 說明 |
 |------|----------|------|
 | Android/iOS/macOS | `FFmpegKit` | 原生 FFmpeg 綁定 |
