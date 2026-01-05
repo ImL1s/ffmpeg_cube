@@ -1,0 +1,55 @@
+name: ffmpeg_cube
+description: "Cross-platform audio/video processing and playback SDK for Flutter. 跨平台影音處理與播放 SDK，支援轉檔、裁剪、縮圖、合併、混音、字幕、播放等功能。"
+version: 0.1.0
+
+# TODO: Update with actual repository URL before publishing
+# homepage: https://github.com/user/ffmpeg_cube
+# repository: https://github.com/user/ffmpeg_cube
+# issue_tracker: https://github.com/user/ffmpeg_cube/issues
+
+topics:
+  - video
+  - audio
+  - ffmpeg
+  - media
+  - transcoding
+
+platforms:
+  android:
+  ios:
+  macos:
+  windows:
+  linux:
+  web:
+
+environment:
+  sdk: ^3.0.0
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # FFmpeg for mobile platforms
+  ffmpeg_kit_flutter_new: ^4.1.0
+  # Cross-platform media playback
+  media_kit: ^1.1.10
+  media_kit_video: ^1.2.4
+  media_kit_libs_android_video: ^1.3.6
+  media_kit_libs_ios_video: ^1.1.4
+  media_kit_libs_macos_video: ^1.1.4
+  media_kit_libs_windows_video: ^1.0.9
+  media_kit_libs_linux: ^1.1.3
+  # Utilities
+  path: ^1.9.0
+  path_provider: ^2.1.2
+  uuid: ^4.3.3
+  http: ^1.6.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  mockito: ^5.4.4
+  build_runner: ^2.4.7
+
+flutter:

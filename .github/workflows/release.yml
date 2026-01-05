@@ -1,0 +1,25 @@
+name: Create Release Draft
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            ffmpeg_cube_pkg/CHANGELOG.md

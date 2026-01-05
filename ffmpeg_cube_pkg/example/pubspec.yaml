@@ -1,0 +1,38 @@
+name: ffmpeg_cube_example
+description: "FFmpeg Cube SDK 範例應用程式"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.0.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  # SDK 依賴
+  ffmpeg_cube:
+    path: ../
+  # 檔案選擇
+  file_picker: ^8.0.0
+  # 權限處理
+  permission_handler: ^11.3.0
+  # 路徑處理
+  path_provider: ^2.1.2
+  path: ^1.9.0
+  # media_kit 初始化
+  media_kit: ^1.1.10
+  media_kit_video: ^1.2.4
+  media_kit_libs_android_video: ^1.3.6
+  media_kit_libs_ios_video: ^1.1.4
+  media_kit_libs_macos_video: ^1.1.4
+  media_kit_libs_windows_video: ^1.0.9
+  media_kit_libs_linux: ^1.1.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
