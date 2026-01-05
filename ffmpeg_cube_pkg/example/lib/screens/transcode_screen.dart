@@ -180,8 +180,9 @@ class _TranscodeScreenState extends State<TranscodeScreen> {
                             onChanged: _isProcessing
                                 ? null
                                 : (v) {
-                                    if (v != null)
+                                    if (v != null) {
                                       setState(() => _videoCodec = v);
+                                    }
                                   },
                             items: const [
                               DropdownMenuItem(
@@ -210,8 +211,9 @@ class _TranscodeScreenState extends State<TranscodeScreen> {
                             onChanged: _isProcessing
                                 ? null
                                 : (v) {
-                                    if (v != null)
+                                    if (v != null) {
                                       setState(() => _resolution = v);
+                                    }
                                   },
                             items: const [
                               DropdownMenuItem(

@@ -87,8 +87,9 @@ class MixAudioJob extends BaseJob {
   bool validate() {
     if (inputAudioPaths.length < 2) return false;
     if (outputPath.isEmpty) return false;
-    if (volumes != null && volumes!.length != inputAudioPaths.length)
+    if (volumes != null && volumes!.length != inputAudioPaths.length) {
       return false;
+    }
     return true;
   }
 }
