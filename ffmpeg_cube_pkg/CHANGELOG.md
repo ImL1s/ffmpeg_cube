@@ -45,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Probe screen with media info display
 
 ### Tests
-- 34 unit tests covering all job models
+- 106 unit tests covering all job models
 - Job validation and FFmpeg argument generation
 - ProbeResult JSON parsing
 - FormatPolicy recommendations
