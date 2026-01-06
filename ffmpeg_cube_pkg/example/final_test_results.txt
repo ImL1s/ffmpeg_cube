@@ -1,0 +1,47 @@
+00:00 +0: loading D:/SideProject/ffmpeg_cube/ffmpeg_cube_pkg/example/integration_test/app_test.dart
+Building Windows application...                                    42.8s
+??Built build\windows\x64\runner\Debug\example.exe
+00:00 +0: App Navigation Tests Home screen displays all feature cards
+00:00 +0: loading D:/SideProject/ffmpeg_cube/ffmpeg_cube_pkg/example/integration_test/app_test.dart
+media_kit: NativeReferenceHolder: Allocated 1478880724864
+00:00 +1: App Navigation Tests Navigate to transcode screen
+00:01 +2: App Navigation Tests Navigate to thumbnail screen
+????EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ??????????????????????????????????????????????????????The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 2 widgets with text "?豢?敶梁?": [
+            Text("?豢?敶梁?", inherit: true, size: 16.0, weight: 700, dependencies:
+[DefaultSelectionStyle, DefaultTextStyle, MediaQuery]),
+            Text("?豢?敶梁?", dependencies: [DefaultSelectionStyle, DefaultTextStyle, MediaQuery]),
+          ]>
+   Which: is too many
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///D:/SideProject/ffmpeg_cube/ffmpeg_cube_pkg/example/integration_test/app_test.dart:67:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:189:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1027:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///D:/SideProject/ffmpeg_cube/ffmpeg_cube_pkg/example/integration_test/app_test.dart line 67
+The test description was:
+  Navigate to thumbnail screen
+????????????????????????????????????????????????????????????????????????????????????????????????????
+00:01 +2 -1: App Navigation Tests Navigate to thumbnail screen [E]
+  Test failed. See exception logs above.
+  The test description was: Navigate to thumbnail screen
+  
+00:01 +2 -1: App Navigation Tests Navigate to player screen
+00:02 +2 -1: App Navigation Tests Home screen displays all feature cards
+VideoOutput.Resize
+{handle: 1478991592592, id: 1478991241648, rect: {height: 0, left: 0, top: 0, width: 0}}
+NativeVideoController: Texture ID: 1478991241648
+00:02 +3 -1: App Navigation Tests Navigate to probe screen
+00:03 +4 -1: App Navigation Tests Navigate back from transcode screen
+00:04 +5 -1: Transcode Screen Tests Transcode screen shows codec options
+00:05 +6 -1: Transcode Screen Tests Start transcode button is disabled without file
+00:05 +7 -1: (tearDownAll)
+00:05 +7 -1: Some tests failed.

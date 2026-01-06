@@ -1,0 +1,19 @@
+00:00 +0: loading D:/SideProject/ffmpeg_cube/ffmpeg_cube_pkg/example/integration_test/app_test.dart
+Building Windows application...                                    42.9s
+??Built build\windows\x64\runner\Debug\example.exe
+00:00 +0: App Navigation Tests Home screen displays all feature cards
+00:00 +0: loading D:/SideProject/ffmpeg_cube/ffmpeg_cube_pkg/example/integration_test/app_test.dart
+media_kit: NativeReferenceHolder: Allocated 2439313137600
+00:00 +1: App Navigation Tests Navigate to transcode screen
+00:01 +2: App Navigation Tests Navigate to thumbnail screen
+00:01 +3: App Navigation Tests Navigate to player screen
+00:02 +3: App Navigation Tests Home screen displays all feature cards
+VideoOutput.Resize
+{handle: 2439503109072, id: 2439500299984, rect: {height: 0, left: 0, top: 0, width: 0}}
+NativeVideoController: Texture ID: 2439500299984
+00:02 +4: App Navigation Tests Navigate to probe screen
+00:03 +5: App Navigation Tests Navigate back from transcode screen
+00:04 +6: Transcode Screen Tests Transcode screen shows codec options
+00:04 +7: Transcode Screen Tests Start transcode button is disabled without file
+00:05 +8: (tearDownAll)
+00:05 +8: All tests passed!

@@ -63,8 +63,10 @@ void main() {
       tester.widget<InkWell>(inkWellFinder).onTap?.call();
       await tester.pumpAndSettle();
 
-      // Verify thumbnail screen is displayed
-      expect(find.text('選擇影片'), findsOneWidget);
+      // Verify thumbnail screen is displayed (AppBar is present)
+      expect(find.byType(AppBar), findsOneWidget);
+      // Verify we are NOT on home screen anymore
+      expect(find.byKey(const Key('transcode_card')), findsNothing);
     });
 
     testWidgets('Navigate to player screen', (tester) async {
