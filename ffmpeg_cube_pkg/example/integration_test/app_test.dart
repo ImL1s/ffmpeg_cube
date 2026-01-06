@@ -23,7 +23,6 @@ void main() {
     });
 
     testWidgets('Navigate to transcode screen', (tester) async {
-
       await tester.pumpWidget(const FFmpegCubeExampleApp());
       await tester.pumpAndSettle();
 
@@ -37,9 +36,7 @@ void main() {
       expect(find.text('轉檔設定'), findsOneWidget);
     });
 
-
     testWidgets('Navigate to thumbnail screen', (tester) async {
-
       await tester.pumpWidget(const FFmpegCubeExampleApp());
       await tester.pumpAndSettle();
 
@@ -54,7 +51,7 @@ void main() {
         ),
         maxScrolls: 50,
       );
-      
+
       // Direct interaction - bypass coordinate based tap
       final inkWellFinder = find.descendant(
         of: thumbnailCard,
@@ -84,7 +81,7 @@ void main() {
         ),
         maxScrolls: 50,
       );
-      
+
       // Direct interaction - bypass coordinate based tap
       final inkWellFinder = find.descendant(
         of: playerCard,
@@ -113,7 +110,7 @@ void main() {
         ),
         maxScrolls: 50,
       );
-      
+
       // Direct interaction - bypass coordinate based tap
       final inkWellFinder = find.descendant(
         of: probeCard,
@@ -127,9 +124,7 @@ void main() {
       expect(find.text('選擇媒體檔案'), findsOneWidget);
     });
 
-
     testWidgets('Navigate back from transcode screen', (tester) async {
-
       await tester.pumpWidget(const FFmpegCubeExampleApp());
       await tester.pumpAndSettle();
 
@@ -153,7 +148,6 @@ void main() {
 
   group('Transcode Screen Tests', () {
     testWidgets('Transcode screen shows codec options', (tester) async {
-
       await tester.pumpWidget(const FFmpegCubeExampleApp());
       await tester.pumpAndSettle();
 
@@ -169,7 +163,6 @@ void main() {
 
     testWidgets('Start transcode button is disabled without file',
         (tester) async {
-
       await tester.pumpWidget(const FFmpegCubeExampleApp());
       await tester.pumpAndSettle();
 

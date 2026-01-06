@@ -20,8 +20,8 @@ class _ProbeScreenState extends BaseJobScreenState<ProbeScreen> {
 
   @override
   Widget buildConfigSection(BuildContext context) {
-    return _probeData == null 
-        ? const Text('Click Start Job to probe.') 
+    return _probeData == null
+        ? const Text('Click Start Job to probe.')
         : Container(
             constraints: const BoxConstraints(maxHeight: 400),
             child: SingleChildScrollView(
@@ -36,13 +36,14 @@ class _ProbeScreenState extends BaseJobScreenState<ProbeScreen> {
   @override
   Future<void> executeJob() async {
     final result = await client.probe(inputPath!);
-    
+
     if (result.success) {
       setState(() {
         // ProbeResult to Map
         _probeData = result.data?.rawData ?? {'error': 'No data'};
         // Hide standard progress bar usage in base
-        currentProgress = JobProgress(progress: 1.0, totalDuration: Duration.zero); 
+        currentProgress =
+            JobProgress(progress: 1.0, totalDuration: Duration.zero);
       });
     } else {
       throw result.error?.message ?? 'Unknown error';

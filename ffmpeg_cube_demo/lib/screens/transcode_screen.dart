@@ -27,22 +27,25 @@ class _TranscodeScreenState extends BaseJobScreenState<TranscodeScreen> {
         DropdownButtonFormField<VideoCodec>(
           decoration: const InputDecoration(labelText: 'Video Codec'),
           initialValue: videoCodec,
-          items: VideoCodec.values.map((e) => DropdownMenuItem(
-            value: e, child: Text(e.name))).toList(),
+          items: VideoCodec.values
+              .map((e) => DropdownMenuItem(value: e, child: Text(e.name)))
+              .toList(),
           onChanged: (v) => setState(() => videoCodec = v!),
         ),
         DropdownButtonFormField<AudioCodec>(
           decoration: const InputDecoration(labelText: 'Audio Codec'),
           initialValue: audioCodec,
-          items: AudioCodec.values.map((e) => DropdownMenuItem(
-            value: e, child: Text(e.name))).toList(),
+          items: AudioCodec.values
+              .map((e) => DropdownMenuItem(value: e, child: Text(e.name)))
+              .toList(),
           onChanged: (v) => setState(() => audioCodec = v!),
         ),
         DropdownButtonFormField<VideoResolution>(
           decoration: const InputDecoration(labelText: 'Resolution'),
           initialValue: resolution,
-          items: VideoResolution.values.map((e) => DropdownMenuItem(
-            value: e, child: Text(e.name))).toList(),
+          items: VideoResolution.values
+              .map((e) => DropdownMenuItem(value: e, child: Text(e.name)))
+              .toList(),
           onChanged: (v) => setState(() => resolution = v!),
         ),
       ],
@@ -52,8 +55,9 @@ class _TranscodeScreenState extends BaseJobScreenState<TranscodeScreen> {
   @override
   Future<void> executeJob() async {
     final dir = await getTemporaryDirectory();
-    final out = p.join(dir.path, 'transcoded_${DateTime.now().millisecondsSinceEpoch}.$containerFormat');
-    
+    final out = p.join(dir.path,
+        'transcoded_${DateTime.now().millisecondsSinceEpoch}.$containerFormat');
+
     final job = TranscodeJob(
       inputPath: inputPath!,
       outputPath: out,

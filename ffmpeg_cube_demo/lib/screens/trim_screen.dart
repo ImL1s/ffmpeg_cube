@@ -46,7 +46,7 @@ class _TrimScreenState extends BaseJobScreenState<TrimScreen> {
   @override
   Widget buildConfigSection(BuildContext context) {
     if (_isProbing) return const Center(child: CircularProgressIndicator());
-    
+
     if (_totalDuration == null) {
       return const Text('Select a file to load duration.');
     }
@@ -62,7 +62,8 @@ class _TrimScreenState extends BaseJobScreenState<TrimScreen> {
           values: _rangeValues!,
           min: 0,
           max: _totalDuration!.inSeconds.toDouble(),
-          divisions: _totalDuration!.inSeconds > 0 ? _totalDuration!.inSeconds : 1,
+          divisions:
+              _totalDuration!.inSeconds > 0 ? _totalDuration!.inSeconds : 1,
           labels: RangeLabels(
             _formatDuration(Duration(seconds: _rangeValues!.start.toInt())),
             _formatDuration(Duration(seconds: _rangeValues!.end.toInt())),
@@ -82,10 +83,11 @@ class _TrimScreenState extends BaseJobScreenState<TrimScreen> {
   @override
   Future<void> executeJob() async {
     if (_rangeValues == null) return;
-    
+
     final dir = await getTemporaryDirectory();
-    final out = p.join(dir.path, 'trimmed_${DateTime.now().millisecondsSinceEpoch}.mp4');
-    
+    final out = p.join(
+        dir.path, 'trimmed_${DateTime.now().millisecondsSinceEpoch}.mp4');
+
     final start = Duration(seconds: _rangeValues!.start.toInt());
     final end = Duration(seconds: _rangeValues!.end.toInt());
 

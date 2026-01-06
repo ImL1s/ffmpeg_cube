@@ -164,7 +164,7 @@ class FFmpegCubeClient {
         // Actually, since execute now needs a BaseJob, we need a workaround
         // Let's just use standard concat job execution after setting up the file
         final backend = await _router.getBackend();
-        
+
         // Create a temporary job-like execution
         // We need to call the backend with args specifically for demuxer
         // But backend.execute now requires a BaseJob

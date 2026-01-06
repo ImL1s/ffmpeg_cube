@@ -21,7 +21,7 @@ class _SubtitleScreenState extends State<SubtitleScreen> {
   bool isProcessing = false;
   JobProgress? currentProgress;
   String? errorMessage;
-  
+
   SubtitleEmbedType embedType = SubtitleEmbedType.hardcode;
 
   Future<void> pickVideo() async {
@@ -46,8 +46,9 @@ class _SubtitleScreenState extends State<SubtitleScreen> {
 
     try {
       final dir = await getTemporaryDirectory();
-      final out = p.join(dir.path, 'subbed_${DateTime.now().millisecondsSinceEpoch}.mp4');
-      
+      final out = p.join(
+          dir.path, 'subbed_${DateTime.now().millisecondsSinceEpoch}.mp4');
+
       final job = SubtitleJob(
         videoPath: videoPath!,
         subtitlePath: subtitlePath!,
@@ -83,7 +84,8 @@ class _SubtitleScreenState extends State<SubtitleScreen> {
           children: [
             _buildFileCard('Video File', videoPath, Icons.movie, pickVideo),
             const Gap(16),
-            _buildFileCard('Subtitle File', subtitlePath, Icons.subtitles, pickSubtitle),
+            _buildFileCard(
+                'Subtitle File', subtitlePath, Icons.subtitles, pickSubtitle),
             const Gap(16),
 
             // Config
@@ -93,48 +95,60 @@ class _SubtitleScreenState extends State<SubtitleScreen> {
                 child: Column(
                   children: [
                     DropdownButtonFormField<SubtitleEmbedType>(
-                       decoration: const InputDecoration(labelText: 'Embed Type'),
-                       initialValue: embedType,
-                       items: SubtitleEmbedType.values.map((e) => DropdownMenuItem(
-                         value: e, child: Text(e.name))).toList(),
-                       onChanged: (v) => setState(() => embedType = v!),
+                      decoration:
+                          const InputDecoration(labelText: 'Embed Type'),
+                      initialValue: embedType,
+                      items: SubtitleEmbedType.values
+                          .map((e) =>
+                              DropdownMenuItem(value: e, child: Text(e.name)))
+                          .toList(),
+                      onChanged: (v) => setState(() => embedType = v!),
                     ),
                   ],
                 ),
               ),
             ),
-             const Gap(24),
+            const Gap(24),
 
             if (isProcessing) ...[
               LinearProgressIndicator(value: currentProgress?.progress),
               Text('Processing...'),
-            ] else 
+            ] else
               ElevatedButton.icon(
-                onPressed: (videoPath != null && subtitlePath != null) ? executeJob : null,
+                onPressed: (videoPath != null && subtitlePath != null)
+                    ? executeJob
+                    : null,
                 icon: const Icon(Icons.play_arrow),
                 label: const Text('Burn/Embed Subtitles'),
               ),
 
-             if (outputSection != null) outputSection!,
-             if (errorMessage != null)
-               Padding(padding: EdgeInsets.all(8), child: Text(errorMessage!, style: TextStyle(color: Colors.red))),
+            if (outputSection != null) outputSection!,
+            if (errorMessage != null)
+              Padding(
+                  padding: EdgeInsets.all(8),
+                  child:
+                      Text(errorMessage!, style: TextStyle(color: Colors.red))),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildFileCard(String title, String? path, IconData icon, VoidCallback onTap) {
+  Widget _buildFileCard(
+      String title, String? path, IconData icon, VoidCallback onTap) {
     return Card(
       child: ListTile(
         leading: Icon(icon),
-        title: Text(path != null ? path.split(Platform.pathSeparator).last : 'Select $title'),
+        title: Text(path != null
+            ? path.split(Platform.pathSeparator).last
+            : 'Select $title'),
         subtitle: path != null ? Text(path) : null,
-        trailing: IconButton(icon: const Icon(Icons.folder_open), onPressed: onTap),
+        trailing:
+            IconButton(icon: const Icon(Icons.folder_open), onPressed: onTap),
       ),
     );
   }
-  
+
   Widget? get outputSection {
     if (outputPath == null) return null;
     return Column(
@@ -142,12 +156,12 @@ class _SubtitleScreenState extends State<SubtitleScreen> {
         const Gap(24),
         const Text('Output', style: TextStyle(fontWeight: FontWeight.bold)),
         Card(
-           color: Colors.green.shade50,
-           child: ListTile(
-             leading: const Icon(Icons.check_circle, color: Colors.green),
-             title: Text(outputPath!.split(Platform.pathSeparator).last),
-             subtitle: Text(outputPath!),
-           ),
+          color: Colors.green.shade50,
+          child: ListTile(
+            leading: const Icon(Icons.check_circle, color: Colors.green),
+            title: Text(outputPath!.split(Platform.pathSeparator).last),
+            subtitle: Text(outputPath!),
+          ),
         )
       ],
     );

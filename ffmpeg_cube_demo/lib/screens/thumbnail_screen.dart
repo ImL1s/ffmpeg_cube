@@ -44,8 +44,12 @@ class _ThumbnailScreenState extends BaseJobScreenState<ThumbnailScreen> {
 
   @override
   Widget buildConfigSection(BuildContext context) {
-    if (_isProbing) return const Center(child: CircularProgressIndicator());
-    if (_totalDuration == null) return const Text('Select a file to enable options.');
+    if (_isProbing) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (_totalDuration == null) {
+      return const Text('Select a file to enable options.');
+    }
 
     return Column(
       children: [
@@ -80,8 +84,9 @@ class _ThumbnailScreenState extends BaseJobScreenState<ThumbnailScreen> {
   @override
   Future<void> executeJob() async {
     final dir = await getTemporaryDirectory();
-    final out = p.join(dir.path, 'thumb_${DateTime.now().millisecondsSinceEpoch}.jpg');
-    
+    final out =
+        p.join(dir.path, 'thumb_${DateTime.now().millisecondsSinceEpoch}.jpg');
+
     final job = ThumbnailJob(
       videoPath: inputPath!,
       outputImagePath: out,
@@ -93,9 +98,10 @@ class _ThumbnailScreenState extends BaseJobScreenState<ThumbnailScreen> {
 
     if (result.success) {
       setState(() {
-         outputPath = out;
-         // Fake progress since thumbnail usually doesn't have progress
-         currentProgress = JobProgress(progress: 1.0, totalDuration: Duration.zero);
+        outputPath = out;
+        // Fake progress since thumbnail usually doesn't have progress
+        currentProgress =
+            JobProgress(progress: 1.0, totalDuration: Duration.zero);
       });
     } else {
       throw result.error?.message ?? 'Unknown error';

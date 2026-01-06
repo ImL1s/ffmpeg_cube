@@ -60,7 +60,7 @@ class WasmBackend implements FFmpegBackend {
     void Function(JobProgress)? onProgress,
     Duration? totalDuration,
   }) async {
-    final args = job.toFFmpegArgs();
+
     if (!await isAvailable()) {
       return JobResult.failure(JobError.platformNotSupported(
           'Web (ffmpeg.wasm not available). Ensure COOP/COEP headers are set.'));
@@ -70,7 +70,7 @@ class WasmBackend implements FFmpegBackend {
 
     try {
       await impl.executeWasm(
-        args,
+        job,
         onProgress: onProgress != null
             ? (double progress) {
                 onProgress(JobProgress(

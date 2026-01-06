@@ -36,7 +36,7 @@ class _ConcatScreenState extends State<ConcatScreen> {
 
   Future<void> executeJob() async {
     if (inputPaths.isEmpty) return;
-    
+
     setState(() {
       isProcessing = true;
       errorMessage = null;
@@ -45,8 +45,9 @@ class _ConcatScreenState extends State<ConcatScreen> {
 
     try {
       final dir = await getTemporaryDirectory();
-      final out = p.join(dir.path, 'concat_${DateTime.now().millisecondsSinceEpoch}.mp4');
-      
+      final out = p.join(
+          dir.path, 'concat_${DateTime.now().millisecondsSinceEpoch}.mp4');
+
       final job = ConcatJob(
         inputPaths: inputPaths,
         outputPath: out,
@@ -86,14 +87,16 @@ class _ConcatScreenState extends State<ConcatScreen> {
               child: Column(
                 children: [
                   ...inputPaths.map((path) => ListTile(
-                    leading: const Icon(Icons.movie),
-                    title: Text(path.split(Platform.pathSeparator).last),
-                    subtitle: Text(path, maxLines: 1, overflow: TextOverflow.ellipsis),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () => setState(() => inputPaths.remove(path)),
-                    ),
-                  )),
+                        leading: const Icon(Icons.movie),
+                        title: Text(path.split(Platform.pathSeparator).last),
+                        subtitle: Text(path,
+                            maxLines: 1, overflow: TextOverflow.ellipsis),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () =>
+                              setState(() => inputPaths.remove(path)),
+                        ),
+                      )),
                   ListTile(
                     leading: const Icon(Icons.add),
                     title: const Text('Add Files'),
@@ -105,7 +108,8 @@ class _ConcatScreenState extends State<ConcatScreen> {
             const Gap(16),
 
             // Config
-            Text('Configuration', style: Theme.of(context).textTheme.titleSmall),
+            Text('Configuration',
+                style: Theme.of(context).textTheme.titleSmall),
             const Gap(8),
             Card(
               child: Padding(
@@ -115,14 +119,17 @@ class _ConcatScreenState extends State<ConcatScreen> {
                     DropdownButtonFormField<ConcatMethod>(
                       decoration: const InputDecoration(labelText: 'Method'),
                       initialValue: method,
-                      items: ConcatMethod.values.map((e) => DropdownMenuItem(
-                        value: e, child: Text(e.name))).toList(),
+                      items: ConcatMethod.values
+                          .map((e) =>
+                              DropdownMenuItem(value: e, child: Text(e.name)))
+                          .toList(),
                       onChanged: (v) => setState(() => method = v!),
                     ),
                     const Gap(8),
-                    const Text('Demuxer: Fast, no re-encode (requires same codec)\n'
-                               'Filter: Slow, re-encode (supports any inputs)', 
-                               style: TextStyle(fontSize: 12, color: Colors.grey)),
+                    const Text(
+                        'Demuxer: Fast, no re-encode (requires same codec)\n'
+                        'Filter: Slow, re-encode (supports any inputs)',
+                        style: TextStyle(fontSize: 12, color: Colors.grey)),
                   ],
                 ),
               ),
@@ -132,21 +139,22 @@ class _ConcatScreenState extends State<ConcatScreen> {
             // Action
             if (isProcessing) ...[
               LinearProgressIndicator(value: currentProgress?.progress),
-              Text(currentProgress != null 
-                  ? '${(currentProgress!.progress * 100).toStringAsFixed(1)}%' 
+              Text(currentProgress != null
+                  ? '${(currentProgress!.progress * 100).toStringAsFixed(1)}%'
                   : 'Processing...'),
-            ] else 
+            ] else
               ElevatedButton.icon(
                 onPressed: inputPaths.length < 2 ? null : executeJob,
                 icon: const Icon(Icons.merge_type),
                 label: const Text('Merge Files'),
               ),
 
-             if (errorMessage != null)
-               Padding(
-                 padding: const EdgeInsets.only(top: 16),
-                 child: Text(errorMessage!, style: const TextStyle(color: Colors.red)),
-               ),
+            if (errorMessage != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Text(errorMessage!,
+                    style: const TextStyle(color: Colors.red)),
+              ),
           ],
         ),
       ),

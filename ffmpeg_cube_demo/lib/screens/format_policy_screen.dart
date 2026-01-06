@@ -12,16 +12,17 @@ class FormatPolicyScreen extends StatefulWidget {
 class _FormatPolicyScreenState extends State<FormatPolicyScreen> {
   cube.FormatPolicyMode _selectedMode = cube.FormatPolicyMode.crossPlatform;
   bool _isWebTarget = false;
-  cube.TargetPlatform? _simulatedPlatform; 
+  cube.TargetPlatform? _simulatedPlatform;
 
   @override
   Widget build(BuildContext context) {
     final policy = cube.FormatPolicy(mode: _selectedMode);
-    
+
     // Determine platform to use for recommendation
     // Map Flutter platform to Cube platform
     final currentFlutterPlatform = Theme.of(context).platform;
-    final cube.TargetPlatform currentCubePlatform = _mapPlatform(currentFlutterPlatform);
+    final cube.TargetPlatform currentCubePlatform =
+        _mapPlatform(currentFlutterPlatform);
 
     final targetPlatform = _simulatedPlatform ?? currentCubePlatform;
 
@@ -52,12 +53,18 @@ class _FormatPolicyScreenState extends State<FormatPolicyScreen> {
 
   cube.TargetPlatform _mapPlatform(TargetPlatform p) {
     switch (p) {
-      case TargetPlatform.android: return cube.TargetPlatform.android;
-      case TargetPlatform.iOS: return cube.TargetPlatform.ios;
-      case TargetPlatform.macOS: return cube.TargetPlatform.macos;
-      case TargetPlatform.windows: return cube.TargetPlatform.windows;
-      case TargetPlatform.linux: return cube.TargetPlatform.linux;
-      case TargetPlatform.fuchsia: return cube.TargetPlatform.android; // Fallback
+      case TargetPlatform.android:
+        return cube.TargetPlatform.android;
+      case TargetPlatform.iOS:
+        return cube.TargetPlatform.ios;
+      case TargetPlatform.macOS:
+        return cube.TargetPlatform.macos;
+      case TargetPlatform.windows:
+        return cube.TargetPlatform.windows;
+      case TargetPlatform.linux:
+        return cube.TargetPlatform.linux;
+      case TargetPlatform.fuchsia:
+        return cube.TargetPlatform.android; // Fallback
     }
   }
 
@@ -68,10 +75,12 @@ class _FormatPolicyScreenState extends State<FormatPolicyScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Policy Settings', style: Theme.of(context).textTheme.titleLarge),
+            Text('Policy Settings',
+                style: Theme.of(context).textTheme.titleLarge),
             const Gap(16),
             InputDecorator(
-              decoration: const InputDecoration(labelText: 'Policy Mode', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                  labelText: 'Policy Mode', border: OutlineInputBorder()),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<cube.FormatPolicyMode>(
                   value: _selectedMode,
@@ -88,7 +97,9 @@ class _FormatPolicyScreenState extends State<FormatPolicyScreen> {
             ),
             const Gap(16),
             InputDecorator(
-              decoration: const InputDecoration(labelText: 'Target Platform (Simulate)', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                  labelText: 'Target Platform (Simulate)',
+                  border: OutlineInputBorder()),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<cube.TargetPlatform>(
                   value: _simulatedPlatform,
@@ -100,16 +111,16 @@ class _FormatPolicyScreenState extends State<FormatPolicyScreen> {
                       child: Text('Current Device (Auto)'),
                     ),
                     ...cube.TargetPlatform.values.map((p) => DropdownMenuItem(
-                      value: p,
-                      child: Text(p.name),
-                    )),
+                          value: p,
+                          child: Text(p.name),
+                        )),
                   ],
                   onChanged: (v) => setState(() => _simulatedPlatform = v),
                 ),
               ),
             ),
             const Gap(16),
-             SwitchListTile(
+            SwitchListTile(
               title: const Text('Is Web Target?'),
               subtitle: const Text('Simulate browser constraints'),
               value: _isWebTarget,
@@ -129,16 +140,16 @@ class _FormatPolicyScreenState extends State<FormatPolicyScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Row(
+            Row(
               children: [
-                Icon(Icons.recommend, color: Theme.of(context).colorScheme.onPrimaryContainer),
+                Icon(Icons.recommend,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer),
                 const Gap(8),
-                Text(
-                  'Recommendation', 
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  )
-                ),
+                Text('Recommendation',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
+                        )),
               ],
             ),
             const Divider(),
@@ -176,13 +187,15 @@ class _FormatPolicyScreenState extends State<FormatPolicyScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Codec Support on ${platform.name}', style: Theme.of(context).textTheme.titleMedium),
+            Text('Codec Support on ${platform.name}',
+                style: Theme.of(context).textTheme.titleMedium),
             const Gap(8),
             Wrap(
               spacing: 8,
               runSpacing: 8,
               children: codecs.map((codec) {
-                final isSupported = cube.FormatPolicy.isCodecSupported(codec, platform);
+                final isSupported =
+                    cube.FormatPolicy.isCodecSupported(codec, platform);
                 return Chip(
                   avatar: Icon(
                     isSupported ? Icons.check_circle : Icons.cancel,
@@ -190,7 +203,8 @@ class _FormatPolicyScreenState extends State<FormatPolicyScreen> {
                     size: 18,
                   ),
                   label: Text(codec.name),
-                  backgroundColor: isSupported ? Colors.green.shade50 : Colors.red.shade50,
+                  backgroundColor:
+                      isSupported ? Colors.green.shade50 : Colors.red.shade50,
                 );
               }).toList(),
             ),

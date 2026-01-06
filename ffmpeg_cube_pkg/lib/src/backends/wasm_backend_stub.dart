@@ -1,12 +1,10 @@
 import 'dart:typed_data';
-
-/// Stub implementation for non-web platforms
-/// These functions will never be called on non-web platforms
+import '../models/jobs/base_job.dart';
 
 Future<bool> isWasmAvailable() async => false;
 
 Future<void> executeWasm(
-  List<String> args, {
+  BaseJob job, {
   void Function(double)? onProgress,
   bool Function()? isCancelled,
 }) async {

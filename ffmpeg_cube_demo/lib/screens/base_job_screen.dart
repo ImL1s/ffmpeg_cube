@@ -16,22 +16,22 @@ abstract class BaseJobScreenState<T extends BaseJobScreen> extends State<T> {
   JobProgress? currentProgress;
   String? errorMessage;
   final FFmpegCubeClient client = FFmpegCubeClient();
-  
+
   // Custom config widgets for child classes to implement
   Widget buildConfigSection(BuildContext context);
-  
+
   // The actual job execution logic
   Future<void> executeJob();
 
   String get title;
-  
+
   // Permission handling
   Future<bool> checkPermission() async {
     if (Platform.isAndroid || Platform.isIOS) {
-       if (await Permission.storage.request().isGranted) return true;
-       if (await Permission.photos.request().isGranted) return true;
-       if (await Permission.videos.request().isGranted) return true;
-       return false;
+      if (await Permission.storage.request().isGranted) return true;
+      if (await Permission.photos.request().isGranted) return true;
+      if (await Permission.videos.request().isGranted) return true;
+      return false;
     }
     return true;
   }
@@ -66,8 +66,8 @@ abstract class BaseJobScreenState<T extends BaseJobScreen> extends State<T> {
             Card(
               child: ListTile(
                 leading: const Icon(Icons.file_present),
-                title: Text(inputPath != null 
-                    ? inputPath!.split(Platform.pathSeparator).last 
+                title: Text(inputPath != null
+                    ? inputPath!.split(Platform.pathSeparator).last
                     : 'Select a file'),
                 subtitle: inputPath != null ? Text(inputPath!) : null,
                 trailing: IconButton(
@@ -87,7 +87,7 @@ abstract class BaseJobScreenState<T extends BaseJobScreen> extends State<T> {
               ),
             ),
             const Gap(24),
-            
+
             // 3. Action Section
             if (isProcessing) ...[
               LinearProgressIndicator(
@@ -101,25 +101,27 @@ abstract class BaseJobScreenState<T extends BaseJobScreen> extends State<T> {
                   'Progress: ${(currentProgress!.progress * 100).toStringAsFixed(1)}% | '
                   'Speed: ${currentProgress!.speed}x | '
                   'Time: ${currentProgress!.currentTime} / ${currentProgress!.totalDuration}',
-                   style: Theme.of(context).textTheme.bodySmall,
-                   textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall,
+                  textAlign: TextAlign.center,
                 ),
-            ] else 
+            ] else
               ElevatedButton.icon(
-                onPressed: inputPath == null ? null : () async {
-                  setState(() {
-                    isProcessing = true;
-                    errorMessage = null;
-                    currentProgress = null;
-                  });
-                  try {
-                    await executeJob();
-                  } catch (e) {
-                    setState(() => errorMessage = e.toString());
-                  } finally {
-                    setState(() => isProcessing = false);
-                  }
-                },
+                onPressed: inputPath == null
+                    ? null
+                    : () async {
+                        setState(() {
+                          isProcessing = true;
+                          errorMessage = null;
+                          currentProgress = null;
+                        });
+                        try {
+                          await executeJob();
+                        } catch (e) {
+                          setState(() => errorMessage = e.toString());
+                        } finally {
+                          setState(() => isProcessing = false);
+                        }
+                      },
                 icon: const Icon(Icons.play_arrow),
                 label: const Text('Start Job'),
                 style: ElevatedButton.styleFrom(
@@ -127,34 +129,35 @@ abstract class BaseJobScreenState<T extends BaseJobScreen> extends State<T> {
                 ),
               ),
 
-             // 4. Result Section
-             if (outputPath != null) ...[
-               const Gap(24),
-               _buildSectionHeader('Output'),
-               Card(
-                 color: Colors.green.shade50,
-                 child: ListTile(
-                   leading: const Icon(Icons.check_circle, color: Colors.green),
-                   title: Text(outputPath!.split(Platform.pathSeparator).last),
-                   subtitle: Text(outputPath!),
-                   trailing: const Icon(Icons.chevron_right),
-                   onTap: () {
-                     // TODO: Open preview
-                   },
-                 ),
-               )
-             ],
-             
-             if (errorMessage != null) ...[
-               const Gap(24),
-               Card(
-                 color: Colors.red.shade50,
-                 child: Padding(
-                   padding: const EdgeInsets.all(16),
-                   child: Text(errorMessage!, style: const TextStyle(color: Colors.red)),
-                 ),
-               )
-             ]
+            // 4. Result Section
+            if (outputPath != null) ...[
+              const Gap(24),
+              _buildSectionHeader('Output'),
+              Card(
+                color: Colors.green.shade50,
+                child: ListTile(
+                  leading: const Icon(Icons.check_circle, color: Colors.green),
+                  title: Text(outputPath!.split(Platform.pathSeparator).last),
+                  subtitle: Text(outputPath!),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    // TODO: Open preview
+                  },
+                ),
+              )
+            ],
+
+            if (errorMessage != null) ...[
+              const Gap(24),
+              Card(
+                color: Colors.red.shade50,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(errorMessage!,
+                      style: const TextStyle(color: Colors.red)),
+                ),
+              )
+            ]
           ],
         ),
       ),
@@ -167,9 +170,9 @@ abstract class BaseJobScreenState<T extends BaseJobScreen> extends State<T> {
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).primaryColor,
-        ),
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).primaryColor,
+            ),
       ),
     );
   }

@@ -22,7 +22,8 @@ class _PlaybackScreenState extends State<PlaybackScreen> {
           Expanded(
             child: _path == null
                 ? const Center(child: Text('Select a video to play'))
-                : SimpleVideoPlayer(key: ValueKey(_path), path: _path!, autoPlay: true),
+                : SimpleVideoPlayer(
+                    key: ValueKey(_path), path: _path!, autoPlay: true),
           ),
           Padding(
             padding: const EdgeInsets.all(16),
@@ -35,7 +36,7 @@ class _PlaybackScreenState extends State<PlaybackScreen> {
                     onPressed: () async {
                       final result = await FilePicker.platform.pickFiles();
                       if (result != null) {
-                         setState(() => _path = result.files.single.path);
+                        setState(() => _path = result.files.single.path);
                       }
                     },
                   ),
@@ -43,12 +44,13 @@ class _PlaybackScreenState extends State<PlaybackScreen> {
                 const Gap(16),
                 Expanded(
                   child: OutlinedButton.icon(
-                     icon: const Icon(Icons.link),
-                     label: const Text('Open URL (Test)'),
-                     onPressed: () {
-                       // Sample Big Buck Bunny
-                       setState(() => _path = 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8');
-                     },
+                    icon: const Icon(Icons.link),
+                    label: const Text('Open URL (Test)'),
+                    onPressed: () {
+                      // Sample Big Buck Bunny
+                      setState(() => _path =
+                          'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8');
+                    },
                   ),
                 ),
               ],
