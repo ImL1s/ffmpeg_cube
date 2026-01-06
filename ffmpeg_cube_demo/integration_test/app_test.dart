@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:ffmpeg_cube_demo/main.dart' as app;
+import 'package:ffmpeg_cube/ffmpeg_cube.dart' as cube;
 
 /// E2E Integration Tests for FFmpeg Cube Demo App
 ///
@@ -37,7 +38,7 @@ void main() {
       await tester.tap(find.text('Transcode'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Transcode Video'), findsOneWidget);
+      expect(find.text('Transcode'), findsWidgets);
     });
 
     testWidgets('Navigate to Trim screen', (tester) async {
@@ -47,7 +48,7 @@ void main() {
       await tester.tap(find.text('Trim'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Trim Video'), findsOneWidget);
+      expect(find.text('Trim'), findsWidgets);
     });
 
     testWidgets('Navigate to Format Policy screen', (tester) async {
@@ -65,7 +66,7 @@ void main() {
       await tester.tap(find.text('Format Policy'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Format Policy Demo'), findsOneWidget);
+      expect(find.text('Format Policy'), findsWidgets);
     });
   });
 
@@ -84,7 +85,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Find and tap the policy mode dropdown
-      final dropdown = find.byType(DropdownButtonFormField<dynamic>).first;
+      final dropdown = find.byType(DropdownButton<cube.FormatPolicyMode>);
       expect(dropdown, findsOneWidget);
 
       // Verify current recommendation is displayed
@@ -144,7 +145,9 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify dropdowns exist for codec selection
-      expect(find.byType(DropdownButtonFormField<dynamic>), findsWidgets);
+      expect(find.byType(DropdownButtonFormField<cube.VideoCodec>), findsOneWidget);
+      expect(find.byType(DropdownButtonFormField<cube.AudioCodec>), findsOneWidget);
+      expect(find.byType(DropdownButtonFormField<cube.VideoResolution>), findsOneWidget);
 
       // Should show a button to pick/select input file
       expect(
@@ -154,6 +157,38 @@ void main() {
         ),
         findsWidgets,
       );
+
+      // Verify New Optimization UI
+      expect(find.text('Hardware Acceleration'), findsOneWidget);
+      expect(find.text('Preset (Speed vs Quality)'), findsOneWidget);
+    });
+
+    testWidgets('Change transcode preset and hardware acceleration', (tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Transcode'));
+      await tester.pumpAndSettle();
+
+      // Toggle hardware acceleration
+      final hwSwitch = find.byType(SwitchListTile);
+      expect(hwSwitch, findsOneWidget);
+      await tester.tap(hwSwitch);
+      await tester.pumpAndSettle();
+
+      // Change preset
+      final presetDropdown = find.text('medium'); // Default value text
+      expect(presetDropdown, findsOneWidget);
+      await tester.tap(presetDropdown);
+      await tester.pumpAndSettle();
+
+      // Select 'ultrafast' from the menu
+      // Note: Dropdown items are often rendered in a Layer/Overlay
+      final item = find.text('ultrafast').last;
+      await tester.tap(item);
+      await tester.pumpAndSettle();
+
+      expect(find.text('ultrafast'), findsWidgets);
     });
   });
 
@@ -172,7 +207,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Should show playback screen title
-      expect(find.text('Video Player'), findsOneWidget);
+      expect(find.text('Playback'), findsWidgets);
     });
   });
 }

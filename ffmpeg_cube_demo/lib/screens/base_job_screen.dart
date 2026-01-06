@@ -3,6 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:ffmpeg_cube/ffmpeg_cube.dart';
 import 'package:gap/gap.dart';
+import 'package:open_app_file/open_app_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 abstract class BaseJobScreen extends StatefulWidget {
@@ -140,8 +141,10 @@ abstract class BaseJobScreenState<T extends BaseJobScreen> extends State<T> {
                   title: Text(outputPath!.split(Platform.pathSeparator).last),
                   subtitle: Text(outputPath!),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    // TODO: Open preview
+                  onTap: () async {
+                    if (outputPath != null) {
+                      await OpenAppFile.open(outputPath!);
+                    }
                   },
                 ),
               )
