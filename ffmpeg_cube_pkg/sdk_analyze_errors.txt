@@ -1,0 +1,26 @@
+Analyzing ffmpeg_cube_pkg...                                    
+
+   info - The imported package 'integration_test' isn't a dependency of the importing package - integration_test\sdk_test.dart:2:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:integration_test/integration_test.dart' - integration_test\sdk_test.dart:2:8 - uri_does_not_exist
+  error - Undefined name 'IntegrationTestWidgetsFlutterBinding' - integration_test\sdk_test.dart:10:3 - undefined_identifier
+  error - The named parameter 'outputImagePath' is required, but there's no corresponding argument - integration_test\sdk_test.dart:96:19 - missing_required_argument
+  error - The named parameter 'timePosition' is required, but there's no corresponding argument - integration_test\sdk_test.dart:96:19 - missing_required_argument
+  error - The named parameter 'outputPath' isn't defined - integration_test\sdk_test.dart:98:9 - undefined_named_parameter
+  error - The named parameter 'timestamp' isn't defined - integration_test\sdk_test.dart:99:9 - undefined_named_parameter
+  error - The named parameter 'inputAudioPaths' is required, but there's no corresponding argument - integration_test\sdk_test.dart:142:19 - missing_required_argument
+  error - The named parameter 'primaryPath' isn't defined - integration_test\sdk_test.dart:143:9 - undefined_named_parameter
+  error - The named parameter 'secondaryPath' isn't defined - integration_test\sdk_test.dart:144:9 - undefined_named_parameter
+  error - The method 'recommend' isn't defined for the type 'FormatPolicy' - integration_test\sdk_test.dart:156:37 - undefined_method
+  error - The method 'recommend' isn't defined for the type 'FormatPolicy' - integration_test\sdk_test.dart:165:37 - undefined_method
+   info - Don't invoke 'print' in production code - tool\generate_fixtures.dart:7:3 - avoid_print
+   info - Don't invoke 'print' in production code - tool\generate_fixtures.dart:20:7 - avoid_print
+   info - Don't invoke 'print' in production code - tool\generate_fixtures.dart:23:5 - avoid_print
+   info - Don't invoke 'print' in production code - tool\generate_fixtures.dart:27:5 - avoid_print
+   info - Don't invoke 'print' in production code - tool\generate_fixtures.dart:32:3 - avoid_print
+   info - Don't invoke 'print' in production code - tool\generate_fixtures.dart:55:3 - avoid_print
+   info - Don't invoke 'print' in production code - tool\generate_fixtures.dart:78:3 - avoid_print
+   info - Don't invoke 'print' in production code - tool\generate_fixtures.dart:93:3 - avoid_print
+   info - Don't invoke 'print' in production code - tool\generate_fixtures.dart:109:3 - avoid_print
+   info - Don't invoke 'print' in production code - tool\generate_fixtures.dart:115:5 - avoid_print
+
+22 issues found. (ran in 11.8s)
