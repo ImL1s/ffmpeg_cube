@@ -16,6 +16,22 @@ class _TranscodeScreenState extends BaseJobScreenState<TranscodeScreen> {
   AudioCodec audioCodec = AudioCodec.aac;
   VideoResolution resolution = VideoResolution.r720p;
   String containerFormat = 'mp4';
+  
+  // New options
+  String? preset; // e.g., ultrafast, medium
+  bool useHardwareAcceleration = false;
+  
+  final List<String> presetOptions = [
+    'ultrafast',
+    'superfast',
+    'veryfast',
+    'faster',
+    'fast',
+    'medium', // default
+    'slow',
+    'slower',
+    'veryslow',
+  ];
 
   @override
   String get title => 'Transcode';
@@ -48,6 +64,22 @@ class _TranscodeScreenState extends BaseJobScreenState<TranscodeScreen> {
               .toList(),
           onChanged: (v) => setState(() => resolution = v!),
         ),
+        
+        DropdownButtonFormField<String>(
+          decoration: const InputDecoration(labelText: 'Preset (Speed vs Quality)'),
+          initialValue: preset ?? 'medium',
+          items: presetOptions
+              .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+              .toList(),
+          onChanged: (v) => setState(() => preset = v),
+        ),
+        
+        SwitchListTile(
+          title: const Text('Hardware Acceleration'),
+          subtitle: const Text('Try to use hardware encoders if available'),
+          value: useHardwareAcceleration,
+          onChanged: (v) => setState(() => useHardwareAcceleration = v),
+        ),
       ],
     );
   }
@@ -64,6 +96,8 @@ class _TranscodeScreenState extends BaseJobScreenState<TranscodeScreen> {
       videoCodec: videoCodec,
       audioCodec: audioCodec,
       resolution: resolution,
+      preset: preset,
+      useHardwareAcceleration: useHardwareAcceleration,
     );
 
     final result = await client.transcode(

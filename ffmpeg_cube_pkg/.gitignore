@@ -1,3 +1,4 @@
+
 # Miscellaneous
 *.class
 *.log
@@ -29,3 +30,4 @@ migrate_working_dir/
 .flutter-plugins
 .flutter-plugins-dependencies
 build/
+coverage/

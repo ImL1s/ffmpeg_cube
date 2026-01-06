@@ -22,6 +22,38 @@ void main() {
       expect(args.contains('/output.mp4'), true);
     });
 
+    test('toFFmpegArgs includes preset if provided', () {
+      final job = TranscodeJob(
+        inputPath: '/input.mp4',
+        outputPath: '/output.mp4',
+        preset: 'ultrafast',
+      );
+
+      final args = job.toFFmpegArgs();
+
+      expect(args.contains('-preset'), true);
+      expect(args.contains('ultrafast'), true);
+    });
+
+    test('toFFmpegArgs handles hardware acceleration flag (Android mock)', () {
+      // Note: testing actual platform detection in unit test might be tricky
+      // but we can verify the property is accepted by the constructor
+      final job = TranscodeJob(
+        inputPath: '/input.mp4',
+        outputPath: '/output.mp4',
+        videoCodec: VideoCodec.h264,
+        useHardwareAcceleration: true,
+      );
+
+      expect(job.useHardwareAcceleration, true);
+
+      final args = job.toFFmpegArgs();
+      // On most environments (like CI), Platform.isAndroid/iOS will be false
+      // so it will fallback to libx264.
+      // We'll verify it doesn't crash and contains the default codec at least.
+      expect(args.contains('-c:v'), true);
+    });
+
     test('validate returns true for valid job', () {
       final job = TranscodeJob(
         inputPath: '/input.mp4',
