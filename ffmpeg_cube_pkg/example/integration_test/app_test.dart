@@ -91,7 +91,8 @@ void main() {
         matching: find.byType(InkWell),
       );
       tester.widget<InkWell>(inkWellFinder).onTap?.call();
-      await tester.pumpAndSettle();
+      // Video player might have ongoing animations/rendering, so avoid pumpAndSettle
+      await tester.pump(const Duration(seconds: 2));
 
       // Verify player screen is displayed
       expect(find.text('影片播放'), findsOneWidget);
