@@ -1,0 +1,43 @@
+name: ffmpeg_cube_demo
+description: "A comprehensive demo for FFmpeg Cube SDK showcasing all features."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Core SDK (Local Reference)
+  ffmpeg_cube:
+    path: ../ffmpeg_cube_pkg
+  
+  # Media Playback
+  media_kit: ^1.1.10
+  media_kit_video: ^1.2.4
+  media_kit_libs_android_video: ^1.3.6
+  media_kit_libs_ios_video: ^1.1.4
+  media_kit_libs_macos_video: ^1.1.4
+  media_kit_libs_windows_video: ^1.0.9
+  media_kit_libs_linux: ^1.1.3
+
+  # UI Utilities
+  cupertino_icons: ^1.0.8
+  file_picker: ^10.3.8
+  path_provider: ^2.1.2
+  path: ^1.9.0
+  permission_handler: ^11.3.0
+  google_fonts: ^6.1.0
+  provider: ^6.1.1
+  gap: ^3.0.1
+  fluttertoast: ^8.2.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
