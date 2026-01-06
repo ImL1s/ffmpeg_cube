@@ -215,4 +215,6 @@ BSD-3-Clause License
 
 - 📦 [pub.dev](https://pub.dev/packages/ffmpeg_cube)
 - 📖 [完整 SDK 文檔](ffmpeg_cube_pkg/README.md)
+- 📚 [API Documentation](https://iml1s.github.io/ffmpeg_cube/)
 - 🐛 [Issue Tracker](https://github.com/ImL1s/ffmpeg_cube/issues)
+
