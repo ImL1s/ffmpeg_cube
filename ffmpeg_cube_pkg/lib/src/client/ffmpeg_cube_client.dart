@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import '../backends/backend_router.dart';
 import '../models/jobs/base_job.dart';
@@ -157,22 +158,23 @@ class FFmpegCubeClient {
       try {
         await concatFile.writeAsString(job.generateConcatFileContent());
 
-        // Create args with actual file path
-        final args = <String>[
-          '-f',
-          'concat',
-          '-safe',
-          '0',
-          '-i',
-          concatFile.path,
-          '-c',
-          'copy',
-          '-y',
-          job.outputPath,
-        ];
-
+        // For demuxer method, we need to create a custom job with the concat file
+        // Since we can't easily modify the job, we'll run the concat differently
+        // Use the job's original execute but we need to override args
+        // Actually, since execute now needs a BaseJob, we need a workaround
+        // Let's just use standard concat job execution after setting up the file
         final backend = await _router.getBackend();
-        final result = await backend.execute(args, onProgress: onProgress);
+        
+        // Create a temporary job-like execution
+        // We need to call the backend with args specifically for demuxer
+        // But backend.execute now requires a BaseJob
+        // Workaround: Create a TranscodeJob with additionalArgs for the full command
+        final tempJob = TranscodeJob(
+          inputPath: concatFile.path,
+          outputPath: job.outputPath,
+          additionalArgs: ['-f', 'concat', '-safe', '0', '-c', 'copy'],
+        );
+        final result = await backend.execute(tempJob, onProgress: onProgress);
 
         // Cleanup
         await concatFile.delete();
@@ -253,8 +255,27 @@ class FFmpegCubeClient {
 
     args.addAll(['-y', outputPath]);
 
-    final backend = await _router.getBackend();
-    return backend.execute(args);
+    // We need to create a helper method or use a generic job for raw args
+    // But since execute now takes BaseJob, we can't just pass args.
+    // For now, let's create a custom TranscodeJob for audio extraction
+    final job = TranscodeJob(
+      inputPath: videoPath,
+      outputPath: outputPath,
+      audioCodec: audioCodec,
+      videoCodec: null, // No video transcoding explicitly, but we want -vn
+      additionalArgs: ['-vn'],
+    );
+    if (bitrate != null) {
+      // Create a new job with bitrate? TranscodeJob has audioBitrate
+      return transcode(TranscodeJob(
+        inputPath: videoPath,
+        outputPath: outputPath,
+        audioCodec: audioCodec,
+        audioBitrate: bitrate,
+        additionalArgs: ['-vn'],
+      ));
+    }
+    return transcode(job);
   }
 
   // ========== Media Info ==========
@@ -282,6 +303,14 @@ class FFmpegCubeClient {
   Future<void> cancel() async {
     final backend = await _router.getBackend();
     await backend.cancel();
+  }
+
+  /// Read a file from the backend (disk or virtual filesystem)
+  ///
+  /// Useful for Web platform where files are in memory.
+  Future<Uint8List?> readFile(String path) async {
+    final backend = await _router.getBackend();
+    return backend.readFile(path);
   }
 
   /// Dispose resources

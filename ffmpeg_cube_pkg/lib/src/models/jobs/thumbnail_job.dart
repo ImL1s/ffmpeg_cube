@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'base_job.dart';
 
 /// Image format for thumbnail output
@@ -30,10 +32,14 @@ class ThumbnailJob extends BaseJob {
   /// Quality (1-31 for jpg, 0-100 for png/webp)
   final int? quality;
 
+  /// Input data bytes (Web specific)
+  final Uint8List? inputData;
+
   ThumbnailJob({
     required this.videoPath,
     required this.timePosition,
     required this.outputImagePath,
+    this.inputData,
     this.format = ImageFormat.jpg,
     this.width,
     this.quality,

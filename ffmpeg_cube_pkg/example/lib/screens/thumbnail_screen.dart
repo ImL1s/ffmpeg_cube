@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:flutter/foundation.dart';
 import 'package:ffmpeg_cube/ffmpeg_cube.dart';
 
 class ThumbnailScreen extends StatefulWidget {
@@ -16,6 +17,7 @@ class _ThumbnailScreenState extends State<ThumbnailScreen> {
   final FFmpegCubeClient _client = FFmpegCubeClient();
 
   String? _inputPath;
+  Uint8List? _inputBytes; // For Web
   String? _thumbnailPath;
   bool _isProcessing = false;
   String? _error;
@@ -31,11 +33,19 @@ class _ThumbnailScreenState extends State<ThumbnailScreen> {
   Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.video,
+      withData: kIsWeb,
     );
 
-    if (result != null && result.files.single.path != null) {
+    if (result != null) {
+      final file = result.files.single;
       setState(() {
-        _inputPath = result.files.single.path;
+        if (kIsWeb) {
+          _inputPath = file.name;
+          _inputBytes = file.bytes;
+        } else {
+          _inputPath = file.path;
+          _inputBytes = null;
+        }
         _thumbnailPath = null;
         _error = null;
       });
@@ -74,6 +84,7 @@ class _ThumbnailScreenState extends State<ThumbnailScreen> {
 
       final job = ThumbnailJob(
         videoPath: _inputPath!,
+        inputData: _inputBytes,
         timePosition: timePos,
         outputImagePath: outputPath,
         format: ImageFormat.jpg,

@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
 import 'backend_router.dart';
+import '../models/jobs/base_job.dart';
 import '../models/job_error.dart';
 import '../models/job_progress.dart';
 import '../models/probe_result.dart';
@@ -93,10 +95,11 @@ class RemoteBackend implements FFmpegBackend {
 
   @override
   Future<JobResult<void>> execute(
-    List<String> args, {
+    BaseJob job, {
     void Function(JobProgress)? onProgress,
     Duration? totalDuration,
   }) async {
+    final args = job.toFFmpegArgs();
     if (endpoint.isEmpty) {
       return JobResult.failure(JobError(
         code: JobErrorCode.platformNotSupported,
@@ -302,6 +305,17 @@ class RemoteBackend implements FFmpegBackend {
       }
       _currentJobId = null;
     }
+  }
+
+  @override
+  Future<Uint8List?> readFile(String path) async {
+    // TODO: Support downloading result via API if not handled in execute
+    // In execute, we auto-download if completed.
+    final file = File(path);
+    if (await file.exists()) {
+      return await file.readAsBytes();
+    }
+    return null;
   }
 
   @override

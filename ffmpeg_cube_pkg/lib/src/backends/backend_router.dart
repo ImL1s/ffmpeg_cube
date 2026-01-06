@@ -1,4 +1,5 @@
 import 'dart:io' show Platform;
+import 'dart:typed_data';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import '../models/jobs/base_job.dart';
 import '../models/job_error.dart';
@@ -32,15 +33,18 @@ abstract class FFmpegBackend {
   /// Check if this backend is available on the current platform
   Future<bool> isAvailable();
 
-  /// Execute FFmpeg with the given arguments
+  /// Execute a job
   Future<JobResult<void>> execute(
-    List<String> args, {
+    BaseJob job, {
     void Function(JobProgress)? onProgress,
     Duration? totalDuration,
   });
 
   /// Execute FFprobe to get media information
   Future<JobResult<ProbeResult>> probe(String filePath);
+
+  /// Read file content (from disk or virtual FS)
+  Future<Uint8List?> readFile(String path);
 
   /// Cancel a running job
   Future<void> cancel();
@@ -161,7 +165,7 @@ class BackendRouter {
   }) async {
     final backend = await getBackend();
     return backend.execute(
-      job.toFFmpegArgs(),
+      job,
       onProgress: onProgress,
       totalDuration: totalDuration,
     );

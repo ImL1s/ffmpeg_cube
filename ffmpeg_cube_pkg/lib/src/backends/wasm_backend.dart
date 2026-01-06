@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'backend_router.dart';
+import '../models/jobs/base_job.dart';
 import '../models/job_error.dart';
 import '../models/job_progress.dart';
 import '../models/probe_result.dart';
@@ -55,10 +56,11 @@ class WasmBackend implements FFmpegBackend {
 
   @override
   Future<JobResult<void>> execute(
-    List<String> args, {
+    BaseJob job, {
     void Function(JobProgress)? onProgress,
     Duration? totalDuration,
   }) async {
+    final args = job.toFFmpegArgs();
     if (!await isAvailable()) {
       return JobResult.failure(JobError.platformNotSupported(
           'Web (ffmpeg.wasm not available). Ensure COOP/COEP headers are set.'));
@@ -114,20 +116,22 @@ class WasmBackend implements FFmpegBackend {
     }
   }
 
+  @override
+  Future<Uint8List?> readFile(String path) async {
+    if (!await isAvailable()) return null;
+    try {
+      return await impl.readFileWasm(path);
+    } catch (e) {
+      return null;
+    }
+  }
+
   /// Write a file to the ffmpeg.wasm virtual filesystem
   Future<void> writeFile(String path, Uint8List data) async {
     if (!await isAvailable()) {
       throw JobError.platformNotSupported('Web (ffmpeg.wasm not available)');
     }
     await impl.writeFileWasm(path, data);
-  }
-
-  /// Read a file from the ffmpeg.wasm virtual filesystem
-  Future<Uint8List> readFile(String path) async {
-    if (!await isAvailable()) {
-      throw JobError.platformNotSupported('Web (ffmpeg.wasm not available)');
-    }
-    return await impl.readFileWasm(path);
   }
 
   /// Delete a file from the ffmpeg.wasm virtual filesystem

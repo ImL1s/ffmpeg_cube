@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2026-01-06
+
+### Features
+- Added basic Web support using `ffmpeg_wasm`.
+- Updated `TranscodeJob`, `TrimJob`, `ThumbnailJob` to support `inputData` (Uint8List) for memory-based processing.
+- Added `readFile()` method to `FFmpegCubeClient` for retrieving files from virtual filesystem on Web.
+
+### Internal
+- Updated example app to support file picking on Web.
+- Internal backend refactoring to support full Job objects in execution flow.
+
 ## [0.1.2] - 2026-01-06
 
 ### Documentation

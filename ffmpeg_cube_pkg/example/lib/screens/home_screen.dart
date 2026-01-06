@@ -51,6 +51,7 @@ class HomeScreen extends StatelessWidget {
                 mainAxisSpacing: 12,
                 children: [
                   _FeatureCard(
+                    key: const Key('transcode_card'),
                     icon: Icons.swap_horiz,
                     title: '轉檔',
                     description: '影片格式轉換',
@@ -62,6 +63,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   _FeatureCard(
+                    key: const Key('thumbnail_card'),
                     icon: Icons.image,
                     title: '縮圖',
                     description: '擷取影片幀',
@@ -73,6 +75,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   _FeatureCard(
+                    key: const Key('player_card'),
                     icon: Icons.play_circle,
                     title: '播放',
                     description: '跨平台播放器',
@@ -83,6 +86,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   _FeatureCard(
+                    key: const Key('probe_card'),
                     icon: Icons.info,
                     title: '探測',
                     description: '媒體信息查看',
@@ -110,6 +114,7 @@ class _FeatureCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const _FeatureCard({
+    super.key,
     required this.icon,
     required this.title,
     required this.description,

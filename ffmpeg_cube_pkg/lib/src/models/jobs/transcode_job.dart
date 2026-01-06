@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'base_job.dart';
 
 /// Job for video transcoding operations
@@ -35,9 +37,13 @@ class TranscodeJob extends BaseJob {
   /// Enable hardware acceleration if available
   final bool useHardwareAcceleration;
 
+  /// Input data bytes (Web specific)
+  final Uint8List? inputData;
+
   TranscodeJob({
     required this.inputPath,
     required this.outputPath,
+    this.inputData,
     this.videoCodec,
     this.audioCodec,
     this.resolution,

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'base_job.dart';
 
 /// Job for trimming/cutting video
@@ -20,10 +22,14 @@ class TrimJob extends BaseJob {
   /// Use copy codec for faster processing (no re-encoding)
   final bool useCopyCodec;
 
+  /// Input data bytes (Web specific)
+  final Uint8List? inputData;
+
   TrimJob({
     required this.inputPath,
     required this.outputPath,
     required this.startTime,
+    this.inputData,
     this.endTime,
     this.duration,
     this.useCopyCodec = true,

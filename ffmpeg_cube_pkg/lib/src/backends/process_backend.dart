@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'backend_router.dart';
+import '../models/jobs/base_job.dart';
 import '../models/job_error.dart';
 import '../models/job_progress.dart';
 import '../models/probe_result.dart';
@@ -40,10 +42,11 @@ class ProcessBackend implements FFmpegBackend {
 
   @override
   Future<JobResult<void>> execute(
-    List<String> args, {
+    BaseJob job, {
     void Function(JobProgress)? onProgress,
     Duration? totalDuration,
   }) async {
+    final args = job.toFFmpegArgs();
     try {
       _currentProcess = await Process.start(
         _ffmpegCommand,
@@ -141,6 +144,15 @@ class ProcessBackend implements FFmpegBackend {
   Future<void> cancel() async {
     _currentProcess?.kill();
     _currentProcess = null;
+  }
+
+  @override
+  Future<Uint8List?> readFile(String path) async {
+    final file = File(path);
+    if (await file.exists()) {
+      return await file.readAsBytes();
+    }
+    return null;
   }
 
   @override

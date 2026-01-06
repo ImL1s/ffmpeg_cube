@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'base_job.dart';
 
 /// Subtitle embed type
@@ -32,11 +34,15 @@ class SubtitleJob extends BaseJob {
   /// Subtitle position from bottom in pixels (only for hardcode)
   final int? marginV;
 
+  /// Input data bytes (Web specific)
+  final Uint8List? inputData;
+
   SubtitleJob({
     required this.videoPath,
     required this.subtitlePath,
     required this.outputPath,
     this.embedType = SubtitleEmbedType.softcode,
+    this.inputData,
     this.fontSize,
     this.fontName,
     this.marginV,

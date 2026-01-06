@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
 
 import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
@@ -7,6 +9,7 @@ import 'package:ffmpeg_kit_flutter_new/log.dart';
 import 'package:ffmpeg_kit_flutter_new/statistics.dart';
 
 import 'backend_router.dart';
+import '../models/jobs/base_job.dart';
 import '../models/job_error.dart';
 import '../models/job_progress.dart';
 import '../models/probe_result.dart';
@@ -31,10 +34,11 @@ class FFmpegKitBackend implements FFmpegBackend {
 
   @override
   Future<JobResult<void>> execute(
-    List<String> args, {
+    BaseJob job, {
     void Function(JobProgress)? onProgress,
     Duration? totalDuration,
   }) async {
+    final args = job.toFFmpegArgs();
     try {
       final command = args.join(' ');
 
@@ -135,6 +139,15 @@ class FFmpegKitBackend implements FFmpegBackend {
       await FFmpegKit.cancel(_currentSessionId);
       _currentSessionId = null;
     }
+  }
+
+  @override
+  Future<Uint8List?> readFile(String path) async {
+    final file = File(path);
+    if (await file.exists()) {
+      return await file.readAsBytes();
+    }
+    return null;
   }
 
   @override
