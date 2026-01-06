@@ -46,10 +46,10 @@ void main() {
       );
 
       expect(job.useHardwareAcceleration, true);
-      
+
       final args = job.toFFmpegArgs();
       // On most environments (like CI), Platform.isAndroid/iOS will be false
-      // so it will fallback to libx264. 
+      // so it will fallback to libx264.
       // We'll verify it doesn't crash and contains the default codec at least.
       expect(args.contains('-c:v'), true);
     });
