@@ -93,7 +93,10 @@ Future<void> _writeInputData(FFmpeg ffmpeg, BaseJob job) async {
   } else if (job is SubtitleJob) {
     data = job.inputData;
     path = job.videoPath;
-    // TODO: Handle subtitle file data if provided?
+    // Write subtitle file data to virtual filesystem if provided
+    if (job.subtitleData != null && job.subtitlePath.isNotEmpty) {
+      ffmpeg.writeFile(job.subtitlePath, job.subtitleData!);
+    }
   }
 
   if (data != null && path != null && path.isNotEmpty) {
@@ -101,14 +104,143 @@ Future<void> _writeInputData(FFmpeg ffmpeg, BaseJob job) async {
   }
 }
 
-/// Probe a media file
+/// Probe a media file using ffmpeg -i and parsing the output
+///
+/// Since ffmpeg.wasm doesn't expose ffprobe directly, we use ffmpeg -i
+/// and parse the stderr output to extract media information.
 Future<Map<String, dynamic>> probeWasm(String filePath) async {
-  // ffmpeg_wasm usually doesn't expose ffprobe JSON directly same way as native
-  // We might need to run ffmpeg with input and parse stderr, or if the package supports it.
-  // Assuming the package doesn't have probe() wrapper, we might need to rely on
-  // metadata extraction libraries or run ffmpeg -i file.
-  // For now return empty map stub or throw
-  throw UnimplementedError('Probe not fully supported in Wasm yet');
+  final ffmpeg = await _getFFmpeg();
+
+  // Collect log messages
+  final logs = <String>[];
+  ffmpeg.setLogger((LoggerParam param) {
+    logs.add(param.message);
+  });
+
+  try {
+    // Run ffmpeg -i which will fail but output media info
+    // We intentionally don't specify output to trigger info dump
+    await ffmpeg.run(['-i', filePath, '-f', 'null', '-']);
+  } catch (e) {
+    // Expected - ffmpeg -i without output spec will fail
+    // The logs still contain media info
+  }
+
+  // Reset logger with no-op to avoid memory leaks
+  // Note: setLogger doesn't accept null, use empty callback
+  ffmpeg.setLogger((LoggerParam _) {});
+
+  // Parse the collected logs
+  final logOutput = logs.join('\n');
+  return _parseMediaInfo(logOutput);
+}
+
+/// Parse media information from ffmpeg log output
+Map<String, dynamic> _parseMediaInfo(String logOutput) {
+  final result = <String, dynamic>{
+    'format': <String, dynamic>{},
+    'streams': <Map<String, dynamic>>[],
+  };
+
+  // Parse Duration: HH:MM:SS.ms
+  final durationRegex = RegExp(r'Duration:\s*(\d{2}):(\d{2}):(\d{2})\.(\d+)');
+  final durationMatch = durationRegex.firstMatch(logOutput);
+  if (durationMatch != null) {
+    final hours = int.parse(durationMatch.group(1)!);
+    final minutes = int.parse(durationMatch.group(2)!);
+    final seconds = int.parse(durationMatch.group(3)!);
+    final fraction = durationMatch.group(4)!;
+
+    final totalSeconds =
+        hours * 3600 + minutes * 60 + seconds + double.parse('0.$fraction');
+
+    (result['format'] as Map<String, dynamic>)['duration'] =
+        totalSeconds.toString();
+    (result['format'] as Map<String, dynamic>)['duration_formatted'] =
+        '${durationMatch.group(1)}:${durationMatch.group(2)}:${durationMatch.group(3)}';
+  }
+
+  // Parse bitrate
+  final bitrateRegex = RegExp(r'bitrate:\s*(\d+)\s*kb/s');
+  final bitrateMatch = bitrateRegex.firstMatch(logOutput);
+  if (bitrateMatch != null) {
+    (result['format'] as Map<String, dynamic>)['bit_rate'] =
+        (int.parse(bitrateMatch.group(1)!) * 1000).toString();
+  }
+
+  // Parse streams: Stream #0:0(und): Video: h264 ...
+  final streamRegex = RegExp(
+    r'Stream\s+#(\d+):(\d+)(?:\([^)]*\))?:\s*(Video|Audio|Subtitle):\s*([^\n]+)',
+    multiLine: true,
+  );
+
+  for (final match in streamRegex.allMatches(logOutput)) {
+    final streamType = match.group(3)!.toLowerCase();
+    final streamInfo = match.group(4)!;
+    final streamData = <String, dynamic>{
+      'index': int.parse(match.group(2)!),
+      'codec_type': streamType,
+    };
+
+    if (streamType == 'video') {
+      // Parse video codec
+      final codecMatch = RegExp(r'^(\w+)').firstMatch(streamInfo);
+      if (codecMatch != null) {
+        streamData['codec_name'] = codecMatch.group(1);
+      }
+
+      // Parse resolution: 1920x1080, 1280x720, etc.
+      final resolutionRegex = RegExp(r'(\d{2,5})x(\d{2,5})');
+      final resolutionMatch = resolutionRegex.firstMatch(streamInfo);
+      if (resolutionMatch != null) {
+        streamData['width'] = int.parse(resolutionMatch.group(1)!);
+        streamData['height'] = int.parse(resolutionMatch.group(2)!);
+      }
+
+      // Parse frame rate: 30 fps, 29.97 fps, 24/1, etc.
+      final fpsRegex = RegExp(r'(\d+(?:\.\d+)?)\s*fps');
+      final fpsMatch = fpsRegex.firstMatch(streamInfo);
+      if (fpsMatch != null) {
+        streamData['r_frame_rate'] = fpsMatch.group(1);
+      }
+
+      // Parse pixel format: yuv420p, yuv444p, etc.
+      final pixFmtRegex = RegExp(r'(yuv\d+p\d*|rgb\d+|bgr\d+)');
+      final pixFmtMatch = pixFmtRegex.firstMatch(streamInfo);
+      if (pixFmtMatch != null) {
+        streamData['pix_fmt'] = pixFmtMatch.group(1);
+      }
+    } else if (streamType == 'audio') {
+      // Parse audio codec
+      final codecMatch = RegExp(r'^(\w+)').firstMatch(streamInfo);
+      if (codecMatch != null) {
+        streamData['codec_name'] = codecMatch.group(1);
+      }
+
+      // Parse sample rate: 44100 Hz, 48000 Hz
+      final sampleRateRegex = RegExp(r'(\d+)\s*Hz');
+      final sampleRateMatch = sampleRateRegex.firstMatch(streamInfo);
+      if (sampleRateMatch != null) {
+        streamData['sample_rate'] = sampleRateMatch.group(1);
+      }
+
+      // Parse channels: stereo, mono, 5.1
+      if (streamInfo.contains('stereo')) {
+        streamData['channels'] = 2;
+        streamData['channel_layout'] = 'stereo';
+      } else if (streamInfo.contains('mono')) {
+        streamData['channels'] = 1;
+        streamData['channel_layout'] = 'mono';
+      } else if (streamInfo.contains('5.1')) {
+        streamData['channels'] = 6;
+        streamData['channel_layout'] = '5.1';
+      }
+    }
+
+    (result['streams'] as List<Map<String, dynamic>>).add(streamData);
+  }
+
+  return result;
 }
 
 /// Write file to virtual filesystem

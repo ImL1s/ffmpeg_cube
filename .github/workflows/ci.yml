@@ -29,7 +29,7 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libasound2-dev libmpv-dev libgtk-3-dev pkg-config cmake ninja-build
+          sudo apt-get install -y libasound2-dev libmpv-dev libgtk-3-dev pkg-config cmake ninja-build ffmpeg
 
       - name: Install dependencies
         run: flutter pub get
@@ -43,8 +43,11 @@ jobs:
       - name: Pub publish dry-run
         run: flutter pub publish --dry-run
 
+      - name: Generate Test Fixtures
+        run: dart tool/generate_fixtures.dart
+
       - name: Run SDK tests
-        run: flutter test
+        run: flutter test --concurrency=1
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4

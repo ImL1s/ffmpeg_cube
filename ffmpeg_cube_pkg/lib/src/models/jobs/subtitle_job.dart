@@ -34,8 +34,11 @@ class SubtitleJob extends BaseJob {
   /// Subtitle position from bottom in pixels (only for hardcode)
   final int? marginV;
 
-  /// Input data bytes (Web specific)
+  /// Input data bytes (Web specific - video file)
   final Uint8List? inputData;
+
+  /// Subtitle file data bytes (Web specific - subtitle file)
+  final Uint8List? subtitleData;
 
   SubtitleJob({
     required this.videoPath,
@@ -43,6 +46,7 @@ class SubtitleJob extends BaseJob {
     required this.outputPath,
     this.embedType = SubtitleEmbedType.softcode,
     this.inputData,
+    this.subtitleData,
     this.fontSize,
     this.fontName,
     this.marginV,

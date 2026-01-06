@@ -309,8 +309,9 @@ class RemoteBackend implements FFmpegBackend {
 
   @override
   Future<Uint8List?> readFile(String path) async {
-    // TODO: Support downloading result via API if not handled in execute
-    // In execute, we auto-download if completed.
+    // Design note: Remote processing results are auto-downloaded to local disk
+    // in execute() when the job completes. This method reads from that local
+    // copy, which is the intended behavior for remote backend.
     final file = File(path);
     if (await file.exists()) {
       return await file.readAsBytes();
