@@ -44,7 +44,7 @@ Supports **Android**, **iOS**, **macOS**, **Windows**, **Linux**, and **Web**.
 
 ```yaml
 dependencies:
-  ffmpeg_cube: ^0.1.0
+  ffmpeg_cube: ^0.1.3
   # media_kit is required for playback
   media_kit: ^1.1.10
   media_kit_video: ^1.2.4
@@ -174,7 +174,7 @@ await client.thumbnail(ThumbnailJob(
 
 ```yaml
 dependencies:
-  ffmpeg_cube: ^0.1.0
+  ffmpeg_cube: ^0.1.3
   # 播放功能需要 media_kit
   media_kit: ^1.1.10
   media_kit_video: ^1.2.4

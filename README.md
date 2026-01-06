@@ -6,13 +6,6 @@
   <a href="https://github.com/ImL1s/ffmpeg_cube/actions"><img src="https://github.com/ImL1s/ffmpeg_cube/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
 </p>
 
-# FFmpeg Cube Workspace
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Flutter-Framework-blue?logo=flutter" alt="Flutter">
-  <img src="https://img.shields.io/badge/FFmpeg-Powered-green?logo=ffmpeg" alt="FFmpeg">
-  <a href="https://github.com/ImL1s/ffmpeg_cube/actions"><img src="https://github.com/ImL1s/ffmpeg_cube/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-</p>
 
 [English](#english) | [中文](#中文)
 
@@ -45,7 +38,7 @@ ffmpeg_cube/
 
 ```yaml
 dependencies:
-  ffmpeg_cube: ^0.1.1
+  ffmpeg_cube: ^0.1.3
 ```
 
 #### Basic Usage
@@ -109,7 +102,7 @@ ffmpeg_cube/
 
 ```yaml
 dependencies:
-  ffmpeg_cube: ^0.1.1
+  ffmpeg_cube: ^0.1.3
 ```
 
 #### 基本使用
