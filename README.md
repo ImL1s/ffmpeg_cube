@@ -25,6 +25,7 @@ ffmpeg_cube/
 │   ├── lib/             # SDK Source Code
 │   ├── example/         # Example Application
 │   └── test/            # Unit Tests (106 tests)
+├── ffmpeg_cube_demo/    # 📱 Full-Featured Demo App
 ├── docs/                # Design Documentation
 ├── .github/workflows/   # CI/CD Configuration
 └── README.md            # This File
@@ -73,6 +74,17 @@ print('Duration: ${probe.data?.duration}');
 | ▶️ **Playback** | Unified cross-platform player interface |
 | 🧠 **Smart Policy** | Auto-select best codec settings |
 
+### 📱 Demo App
+
+A full-featured demo app showcasing all SDK capabilities:
+
+```bash
+cd ffmpeg_cube_demo
+flutter run
+```
+
+Supports: Android, iOS, macOS, Windows, Linux, Web
+
 ---
 
 <a name="中文"></a>
@@ -89,6 +101,7 @@ ffmpeg_cube/
 │   ├── lib/             # SDK 源碼
 │   ├── example/         # 範例應用程式
 │   └── test/            # 單元測試 (106 tests)
+├── ffmpeg_cube_demo/    # 📱 完整功能展示 App
 ├── docs/                # 設計文檔
 ├── .github/workflows/   # CI/CD 配置
 └── README.md            # 本文件
@@ -136,6 +149,17 @@ print('Duration: ${probe.data?.duration}');
 | 🎵 **音訊處理** | 音軌提取、多軌混音 |
 | ▶️ **統一播放** | 跨平台播放器介面 |
 | 🧠 **智能策略** | 自動選擇最佳編碼參數 |
+
+### 📱 Demo App
+
+完整功能展示應用程式：
+
+```bash
+cd ffmpeg_cube_demo
+flutter run
+```
+
+支援平台：Android、iOS、macOS、Windows、Linux、Web
 
 ---
 
