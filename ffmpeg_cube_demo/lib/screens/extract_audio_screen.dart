@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:ffmpeg_cube/ffmpeg_cube.dart';
 import 'package:path_provider/path_provider.dart';
@@ -25,7 +24,7 @@ class _ExtractAudioScreenState extends BaseJobScreenState<ExtractAudioScreen> {
       children: [
         DropdownButtonFormField<AudioCodec>(
           decoration: const InputDecoration(labelText: 'Output Format'),
-          value: audioCodec,
+          initialValue: audioCodec,
           items: AudioCodec.values.map((e) => DropdownMenuItem(
             value: e, child: Text(e.name))).toList(),
           onChanged: (v) => setState(() => audioCodec = v!),

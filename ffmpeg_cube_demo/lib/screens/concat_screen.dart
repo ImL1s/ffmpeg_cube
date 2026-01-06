@@ -114,7 +114,7 @@ class _ConcatScreenState extends State<ConcatScreen> {
                   children: [
                     DropdownButtonFormField<ConcatMethod>(
                       decoration: const InputDecoration(labelText: 'Method'),
-                      value: method,
+                      initialValue: method,
                       items: ConcatMethod.values.map((e) => DropdownMenuItem(
                         value: e, child: Text(e.name))).toList(),
                       onChanged: (v) => setState(() => method = v!),

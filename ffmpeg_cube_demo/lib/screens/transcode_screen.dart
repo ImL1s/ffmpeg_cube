@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:ffmpeg_cube/ffmpeg_cube.dart';
 import 'package:path_provider/path_provider.dart';
@@ -27,21 +26,21 @@ class _TranscodeScreenState extends BaseJobScreenState<TranscodeScreen> {
       children: [
         DropdownButtonFormField<VideoCodec>(
           decoration: const InputDecoration(labelText: 'Video Codec'),
-          value: videoCodec,
+          initialValue: videoCodec,
           items: VideoCodec.values.map((e) => DropdownMenuItem(
             value: e, child: Text(e.name))).toList(),
           onChanged: (v) => setState(() => videoCodec = v!),
         ),
         DropdownButtonFormField<AudioCodec>(
           decoration: const InputDecoration(labelText: 'Audio Codec'),
-          value: audioCodec,
+          initialValue: audioCodec,
           items: AudioCodec.values.map((e) => DropdownMenuItem(
             value: e, child: Text(e.name))).toList(),
           onChanged: (v) => setState(() => audioCodec = v!),
         ),
         DropdownButtonFormField<VideoResolution>(
           decoration: const InputDecoration(labelText: 'Resolution'),
-          value: resolution,
+          initialValue: resolution,
           items: VideoResolution.values.map((e) => DropdownMenuItem(
             value: e, child: Text(e.name))).toList(),
           onChanged: (v) => setState(() => resolution = v!),

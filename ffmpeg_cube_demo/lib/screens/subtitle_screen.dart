@@ -94,7 +94,7 @@ class _SubtitleScreenState extends State<SubtitleScreen> {
                   children: [
                     DropdownButtonFormField<SubtitleEmbedType>(
                        decoration: const InputDecoration(labelText: 'Embed Type'),
-                       value: embedType,
+                       initialValue: embedType,
                        items: SubtitleEmbedType.values.map((e) => DropdownMenuItem(
                          value: e, child: Text(e.name))).toList(),
                        onChanged: (v) => setState(() => embedType = v!),

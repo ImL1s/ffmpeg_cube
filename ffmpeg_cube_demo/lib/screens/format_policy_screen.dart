@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:ffmpeg_cube/ffmpeg_cube.dart' as cube;
 import 'package:gap/gap.dart';
