@@ -24,10 +24,14 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.24.0'
           
       - name: Flutter Doctor
         run: flutter doctor -v
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev libmpv-dev libgtk-3-dev pkg-config cmake ninja-build
 
       - name: Install dependencies
         run: flutter pub get
@@ -43,8 +47,12 @@ jobs:
       - name: Analyze project source
         run: flutter analyze --no-fatal-warnings --no-fatal-infos || true
 
-      - name: Run tests
+      - name: Run SDK tests
         run: flutter test
+
+      - name: Run example app tests
+        run: flutter test
+        working-directory: ffmpeg_cube_pkg/example
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
