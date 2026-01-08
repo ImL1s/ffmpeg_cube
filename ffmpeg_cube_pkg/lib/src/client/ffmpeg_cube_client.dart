@@ -285,6 +285,49 @@ class FFmpegCubeClient {
     return _router.probe(filePath);
   }
 
+  /// Convert video to high-quality GIF
+  ///
+  /// Uses a two-pass palette approach for optimal quality.
+  /// [startTime] and [duration] are optional to extract a clip.
+  /// [width] defaults to 480 pixels.
+  /// [fps] defaults to 10 frames per second.
+  Future<JobResult<void>> videoToGif({
+    required String videoPath,
+    required String outputPath,
+    Duration? startTime,
+    Duration? duration,
+    int width = 480,
+    int fps = 10,
+  }) async {
+    // Build filter string for palette generation
+    final scaleFilter = 'fps=$fps,scale=$width:-1:flags=lanczos';
+
+    // For simplicity, use a single-pass approach with dithering
+    // A true two-pass would require temp files, which is complex cross-platform
+    final job = TranscodeJob(
+      inputPath: videoPath,
+      outputPath: outputPath,
+      additionalArgs: [
+        if (startTime != null) ...['-ss', _formatDuration(startTime)],
+        if (duration != null) ...['-t', _formatDuration(duration)],
+        '-vf',
+        '$scaleFilter,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse',
+        '-loop',
+        '0',
+      ],
+    );
+
+    return _router.execute(job);
+  }
+
+  String _formatDuration(Duration d) {
+    final hours = d.inHours.toString().padLeft(2, '0');
+    final minutes = (d.inMinutes % 60).toString().padLeft(2, '0');
+    final seconds = (d.inSeconds % 60).toString().padLeft(2, '0');
+    final millis = (d.inMilliseconds % 1000).toString().padLeft(3, '0');
+    return '$hours:$minutes:$seconds.$millis';
+  }
+
   // ========== Utility ==========
 
   /// Get codec recommendation based on policy

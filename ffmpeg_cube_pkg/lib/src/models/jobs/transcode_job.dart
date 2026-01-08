@@ -2,6 +2,31 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'base_job.dart';
+import '../video_filters.dart';
+
+/// Position of the watermark on the video
+enum WatermarkPosition {
+  topLeft,
+  topRight,
+  bottomLeft,
+  bottomRight,
+  center;
+
+  String get ffmpegPosition {
+    switch (this) {
+      case WatermarkPosition.topLeft:
+        return '10:10';
+      case WatermarkPosition.topRight:
+        return 'main_w-overlay_w-10:10';
+      case WatermarkPosition.bottomLeft:
+        return '10:main_h-overlay_h-10';
+      case WatermarkPosition.bottomRight:
+        return 'main_w-overlay_w-10:main_h-overlay_h-10';
+      case WatermarkPosition.center:
+        return '(main_w-overlay_w)/2:(main_h-overlay_h)/2';
+    }
+  }
+}
 
 /// Job for video transcoding operations
 class TranscodeJob extends BaseJob {
@@ -41,6 +66,15 @@ class TranscodeJob extends BaseJob {
   /// FFmpeg preset (e.g., ultrafast, medium)
   final String? preset;
 
+  /// Video filters (rotation, brightness, etc.)
+  final VideoFilters? filters;
+
+  /// Path to watermark image
+  final String? watermarkPath;
+
+  /// Position of the watermark
+  final WatermarkPosition watermarkPosition;
+
   /// Input data bytes (Web specific)
   final Uint8List? inputData;
 
@@ -58,6 +92,9 @@ class TranscodeJob extends BaseJob {
     this.containerFormat,
     this.useHardwareAcceleration = false,
     this.preset,
+    this.filters,
+    this.watermarkPath,
+    this.watermarkPosition = WatermarkPosition.bottomRight,
     super.id,
     super.description,
     super.additionalArgs,
@@ -65,7 +102,30 @@ class TranscodeJob extends BaseJob {
 
   @override
   List<String> toFFmpegArgs() {
-    final args = <String>['-i', inputPath];
+    final args = <String>[];
+
+    // Web Optimization: -movflags +faststart for MP4
+    bool isMP4 = outputPath.toLowerCase().endsWith('.mp4') ||
+        containerFormat?.ffmpegName == 'mp4';
+
+    // Input(s)
+    args.addAll(['-i', inputPath]);
+    if (watermarkPath != null) {
+      args.addAll(['-i', watermarkPath!]);
+    }
+
+    // Video filters / Overlays
+    if (watermarkPath != null) {
+      // Complex filter for watermark + optional filters
+      String vf = filters != null && !filters!.isEmpty
+          ? '[0:v]${filters!.toFFmpegString()}[v0];[v0][1:v]overlay=${watermarkPosition.ffmpegPosition}'
+          : 'overlay=${watermarkPosition.ffmpegPosition}';
+
+      args.addAll(['-filter_complex', vf]);
+    } else if (filters != null && !filters!.isEmpty) {
+      // Simple video filter
+      args.addAll(['-vf', filters!.toFFmpegString()]);
+    }
 
     // Video codec
     if (videoCodec != null) {
@@ -156,7 +216,14 @@ class TranscodeJob extends BaseJob {
     }
 
     // Overwrite output
-    args.addAll(['-y', outputPath]);
+    args.addAll(['-y']);
+
+    // Add faststart for MP4
+    if (isMP4) {
+      args.addAll(['-movflags', '+faststart']);
+    }
+
+    args.add(outputPath);
 
     return args;
   }

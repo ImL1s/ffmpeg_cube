@@ -71,6 +71,48 @@ void main() {
 
       expect(job.validate(), false);
     });
+
+    test('toFFmpegArgs includes filters when provided', () {
+      final job = TranscodeJob(
+        inputPath: '/input.mp4',
+        outputPath: '/output.mp4',
+        filters: const VideoFilters(
+          rotation: VideoRotation.rotate90,
+          brightness: 0.1,
+        ),
+      );
+
+      final args = job.toFFmpegArgs();
+      expect(args.contains('-vf'), true);
+      final argsStr = args.join(' ');
+      expect(argsStr.contains('transpose=1'), true);
+      expect(argsStr.contains('eq=brightness=0.1'), true);
+    });
+
+    test('toFFmpegArgs includes watermark overlay', () {
+      final job = TranscodeJob(
+        inputPath: '/input.mp4',
+        outputPath: '/output.mp4',
+        watermarkPath: '/logo.png',
+        watermarkPosition: WatermarkPosition.topLeft,
+      );
+
+      final args = job.toFFmpegArgs();
+      expect(args.contains('-filter_complex'), true);
+      final argsStr = args.join(' ');
+      expect(argsStr.contains('overlay=10:10'), true);
+    });
+
+    test('toFFmpegArgs adds faststart for MP4', () {
+      final job = TranscodeJob(
+        inputPath: '/input.mp4',
+        outputPath: '/output.mp4',
+      );
+
+      final args = job.toFFmpegArgs();
+      expect(args.contains('-movflags'), true);
+      expect(args.contains('+faststart'), true);
+    });
   });
 
   group('TrimJob', () {

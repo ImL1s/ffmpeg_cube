@@ -72,6 +72,9 @@ export 'src/models/jobs/concat_job.dart';
 export 'src/models/jobs/mix_audio_job.dart';
 export 'src/models/jobs/subtitle_job.dart';
 
+// Models - Filters
+export 'src/models/video_filters.dart';
+
 // Models - Results
 export 'src/models/probe_result.dart';
 export 'src/models/job_progress.dart';
