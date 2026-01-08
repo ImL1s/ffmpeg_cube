@@ -103,6 +103,10 @@ final result = await client.transcode(
     videoCodec: VideoCodec.h264,
     audioCodec: AudioCodec.aac,
     resolution: VideoResolution.r1080p,
+    audioCodec: AudioCodec.aac,
+    resolution: VideoResolution.r1080p,
+    preset: 'medium', // Optional: Speed/Quality preset
+    useHardwareAcceleration: true, // Optional: Try hardware encoders
   ),
   onProgress: (progress) {
     print('Progress: ${progress.progressPercent}%');
@@ -240,7 +244,10 @@ final result = await client.transcode(
     videoCodec: VideoCodec.h264,
     audioCodec: AudioCodec.aac,
     resolution: VideoResolution.r1080p,
+    resolution: VideoResolution.r1080p,
     videoBitrate: '5M',
+    preset: 'ultrafast', // 新增: 轉檔速度預設 (ultrafast, medium, veryslow...)
+    useHardwareAcceleration: true, // 新增: 嘗試啟用硬體加速
   ),
   onProgress: (progress) {
     print('進度: ${progress.progressPercent}%');
