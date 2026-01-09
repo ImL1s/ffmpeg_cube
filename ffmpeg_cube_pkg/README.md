@@ -136,6 +136,36 @@ await client.thumbnail(ThumbnailJob(
 ));
 ```
 
+
+#### 4. Advanced Video Processing (Filters & Watermark)
+
+```dart
+await client.transcode(TranscodeJob(
+  inputPath: '/video.mp4',
+  outputPath: '/output.mp4',
+  // 1. Filters
+  filters: VideoFilters(
+    rotation: VideoRotation.rotate90,
+    brightness: 0.1,
+  ),
+  // 2. Watermark
+  watermarkPath: '/logo.png',
+  watermarkPosition: WatermarkPosition.bottomRight,
+));
+```
+
+#### 5. GIF Creation
+
+```dart
+await client.videoToGif(
+  videoPath: '/input.mp4',
+  outputPath: '/funny.gif',
+  startTime: Duration(seconds: 0),
+  duration: Duration(seconds: 3),
+  fps: 15,
+);
+```
+
 ### 🖥️ Platform Support
 
 | Feature | Android | iOS | macOS | Windows | Linux | Web |
@@ -408,7 +438,39 @@ if (probe.success) {
 }
 ```
 
-#### 9. 影片播放
+
+#### 9. 進階影片處理 (濾鏡與浮水印)
+
+```dart
+await client.transcode(TranscodeJob(
+  inputPath: '/video.mp4',
+  outputPath: '/output.mp4',
+  // 1. 調整濾鏡
+  filters: VideoFilters(
+    rotation: VideoRotation.rotate90, // 旋轉 90 度
+    brightness: 0.1,                  // 增加亮度
+    contrast: 1.2,                    // 增加對比
+  ),
+  // 2. 添加浮水印
+  watermarkPath: '/assets/logo.png',
+  watermarkPosition: WatermarkPosition.topRight,
+));
+```
+
+#### 10. 製作 GIF 動圖
+
+```dart
+await client.videoToGif(
+  videoPath: '/video.mp4',
+  outputPath: '/meme.gif',
+  startTime: Duration(seconds: 10),
+  duration: Duration(seconds: 5),
+  width: 320, // 寬度 (高度自動保持比例)
+  fps: 15,    // 幀率
+);
+```
+
+#### 11. 影片播放
 
 ```dart
 class VideoPlayerWidget extends StatefulWidget {
@@ -468,7 +530,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 }
 ```
 
-#### 10. 智能格式策略
+#### 12. 智能格式策略
 
 ```dart
 // 獲取針對當前平台的最佳編碼建議
